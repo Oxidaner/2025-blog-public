@@ -1,10 +1,10 @@
 [
 	{
-		"name": "macbook pro",
+		"name": "MacBook Pro",
 		"year": 2024,
 		"description": "日常开发、写博客和处理图片的主力设备，主要用于前端工程、代理工具调试和内容创作。",
 		"image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.HuzViREcF1R7C2jRK0jblwHaEK%3Fpid%3DApi&f=1&ipt=e4e806252609f3d256a2f5ed85d8651647b451ea12a50bd3fa7ec8f8f151deac&ipo=images",
-		"url": "",
+		"url": "device-laptop",
 		"tags": [
 			"开发",
 			"写作",
@@ -21,18 +21,6 @@
 			"移动端",
 			"拍摄",
 			"阅读"
-		]
-	},
-	{
-		"name": "平板",
-		"year": 2026,
-		"description": "用于阅读、轻量记录和浏览资料，适合在离开电脑时继续整理想法和查看文档。",
-		"image": "/images/devices/tablet.svg",
-		"url": "device-tablet",
-		"tags": [
-			"阅读",
-			"笔记",
-			"资料整理"
 		]
 	},
 	{
