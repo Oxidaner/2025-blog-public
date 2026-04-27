@@ -92,57 +92,56 @@ export function ProjectCard({ project, isEditMode = false, onUpdate, onDelete }:
 				</div>
 			)}
 
-			<div className='flex items-start gap-4'>
-				<div className='group relative'>
-					<img
-						src={localProject.image}
-						alt={localProject.name}
-						className={cn('h-16 w-16 shrink-0 rounded-xl object-cover', canEdit && 'cursor-pointer')}
-						onClick={() => canEdit && setShowImageDialog(true)}
-					/>
-					{canEdit && (
-						<div className='pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl bg-black/40 opacity-0 transition-opacity group-hover:opacity-100'>
-							<span className='text-xs text-white'>更换</span>
-						</div>
+			<div className='group relative flex h-52 w-full items-center justify-center overflow-hidden rounded-2xl border bg-white/45 max-sm:h-44'>
+				<img
+					src={localProject.image}
+					alt={localProject.name}
+					className={cn('h-full w-full object-contain p-5 transition-transform duration-300 group-hover:scale-105', canEdit && 'cursor-pointer')}
+					onClick={() => canEdit && setShowImageDialog(true)}
+				/>
+				{canEdit && (
+					<div className='pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100'>
+						<span className='text-sm text-white'>更换图片</span>
+					</div>
+				)}
+			</div>
+
+			<div className='flex flex-col gap-3'>
+				<div className='flex items-start justify-between gap-3'>
+					<h3
+						contentEditable={canEdit}
+						suppressContentEditableWarning
+						onBlur={e => handleFieldChange('name', e.currentTarget.textContent || '')}
+						className={cn('text-xl font-semibold leading-snug', canEdit && 'cursor-text focus:outline-none')}>
+						{localProject.name}
+					</h3>
+					{canEdit ? (
+						<input
+							type='number'
+							value={localProject.year}
+							onChange={e => handleFieldChange('year', parseInt(e.target.value) || 0)}
+							className='text-secondary border-secondary/20 w-18 shrink-0 rounded border px-2 py-1 text-sm focus:outline-none'
+						/>
+					) : (
+						<span className='text-secondary shrink-0 pt-1 text-sm'>{localProject.year}</span>
 					)}
 				</div>
-				<div className='flex-1'>
-					<div className='flex items-center gap-2'>
-						<h3
-							contentEditable={canEdit}
-							suppressContentEditableWarning
-							onBlur={e => handleFieldChange('name', e.currentTarget.textContent || '')}
-							className={cn('text-lg font-semibold', canEdit && 'cursor-text focus:outline-none')}>
-							{localProject.name}
-						</h3>
-						{canEdit ? (
-							<input
-								type='number'
-								value={localProject.year}
-								onChange={e => handleFieldChange('year', parseInt(e.target.value) || 0)}
-								className='text-secondary border-secondary/20 w-18 rounded border px-2 py-1 text-sm focus:outline-none'
-							/>
-						) : (
-							<span className='text-secondary text-sm'>{localProject.year}</span>
-						)}
-					</div>
-					<div className='mt-2 flex flex-wrap gap-2'>
-						{canEdit ? (
-							<input
-								type='text'
-								value={localProject.tags.join(', ')}
-								onChange={e => handleTagsChange(e.target.value)}
-								placeholder='标签，用逗号分隔'
-								className='bg-secondary/10 border-secondary/20 w-full rounded-lg border px-2 py-1 text-xs focus:outline-none'
-							/>
-						) : (
-							localProject.tags.map(tag => (
-								<span key={tag} className='text-secondary bg-card rounded-lg px-2 py-1 text-xs'>
-									{tag}
-								</span>
-							))
-						)}
-					</div>
+				<div className='flex flex-wrap gap-2'>
+					{canEdit ? (
+						<input
+							type='text'
+							value={localProject.tags.join(', ')}
+							onChange={e => handleTagsChange(e.target.value)}
+							placeholder='标签，用逗号分隔'
+							className='bg-secondary/10 border-secondary/20 w-full rounded-lg border px-2 py-1 text-xs focus:outline-none'
+						/>
+					) : (
+						localProject.tags.map(tag => (
+							<span key={tag} className='text-secondary bg-card rounded-lg px-2 py-1 text-xs'>
+								{tag}
+							</span>
+						))
+					)}
 				</div>
 			</div>
 
