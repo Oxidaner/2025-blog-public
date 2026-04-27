@@ -33,5 +33,12 @@
 		"url": "https://steinsgate.link/",
 		"description": "哲学系老干部",
 		"stars": 3
+	},
+	{
+		"name": "airbo",
+		"avatar": "https://cdn.airbozh.cn/blog/avatar.png",
+		"url": "https://www.airbozh.cn/",
+		"description": "Stay Hungry,Stay Foolish",
+		"stars": 3
 	}
 ]
