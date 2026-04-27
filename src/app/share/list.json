@@ -7,6 +7,16 @@
 		"tags": [
 			"论坛"
 		],
-		"stars": 3
+		"stars": 5
+	},
+	{
+		"name": "MacKed",
+		"logo": "https://macked.app/wp-content/uploads/favicon.png",
+		"url": "https://macked.app/",
+		"description": "专注于mac软件分享与下载",
+		"tags": [
+			"app"
+		],
+		"stars": 5
 	}
 ]
