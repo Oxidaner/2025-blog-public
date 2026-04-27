@@ -18,5 +18,15 @@
 			"app"
 		],
 		"stars": 5
+	},
+	{
+		"name": "z-library",
+		"logo": "https://img.utdstc.com/icon/c41/416/c41416e49a9074ec44a42846889e1b2df3e8d9f81147380a4aaf2d52fa929e2b:200",
+		"url": "https://zh.z-library.sk/",
+		"description": "全球最大的免费电子书图书馆",
+		"tags": [
+			"book"
+		],
+		"stars": 5
 	}
 ]
