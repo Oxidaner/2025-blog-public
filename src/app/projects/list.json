@@ -1,1 +1,42 @@
-[]
+[
+	{
+		"name": "主力电脑",
+		"year": 2026,
+		"description": "日常开发、写博客和处理图片的主力设备，主要用于前端工程、Agent 工具调试和内容创作。",
+		"image": "/images/devices/laptop.svg",
+		"url": "device-laptop",
+		"tags": ["开发", "写作", "主力设备"]
+	},
+	{
+		"name": "手机",
+		"year": 2026,
+		"description": "随身使用的移动设备，用来处理消息、拍摄素材、阅读文章，也会用于检查博客在移动端的显示效果。",
+		"image": "/images/devices/phone.svg",
+		"url": "device-phone",
+		"tags": ["移动端", "拍摄", "阅读"]
+	},
+	{
+		"name": "平板",
+		"year": 2026,
+		"description": "用于阅读、轻量记录和浏览资料，适合在离开电脑时继续整理想法和查看文档。",
+		"image": "/images/devices/tablet.svg",
+		"url": "device-tablet",
+		"tags": ["阅读", "笔记", "资料整理"]
+	},
+	{
+		"name": "耳机",
+		"year": 2026,
+		"description": "写代码和通勤时使用，主要负责降噪、听音乐和线上沟通，让工作环境更稳定。",
+		"image": "/images/devices/headphones.svg",
+		"url": "device-headphones",
+		"tags": ["音乐", "会议", "降噪"]
+	},
+	{
+		"name": "键盘和桌面外设",
+		"year": 2026,
+		"description": "长期输入和桌面工作流的一部分，偏向舒适、稳定和可维护的使用体验。",
+		"image": "/images/devices/keyboard.svg",
+		"url": "device-keyboard",
+		"tags": ["输入", "桌面", "效率"]
+	}
+]
