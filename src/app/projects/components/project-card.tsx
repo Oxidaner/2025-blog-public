@@ -92,7 +92,7 @@ export function ProjectCard({ project, isEditMode = false, onUpdate, onDelete }:
 				</div>
 			)}
 
-			<div className='group relative flex h-52 w-full items-center justify-center overflow-hidden rounded-2xl border bg-white/45 max-sm:h-44'>
+			<div className='group relative flex h-72 w-full items-center justify-center overflow-hidden rounded-2xl border bg-white/45 max-sm:h-60'>
 				<img
 					src={localProject.image}
 					alt={localProject.name}
