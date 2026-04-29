@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import { cn } from '@/lib/utils'
 import { HomeDraggableLayer } from './home-draggable-layer'
-import { Check, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react'
+import { CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/hooks/use-auth'
@@ -32,6 +32,7 @@ export default function CalendarCard() {
 	const { isAuth, setPrivateKey } = useAuthStore()
 
 	const currentDateKey = now.format('YYYY-MM-DD')
+	const isCurrentMonthVisible = visibleMonth.isSame(now, 'month')
 	const firstDayOfMonth = visibleMonth.startOf('month')
 	const firstDayWeekday = (firstDayOfMonth.day() + 6) % 7
 	const daysInMonth = visibleMonth.daysInMonth()
@@ -167,21 +168,32 @@ export default function CalendarCard() {
 							<span className='text-primary font-medium'>{visibleMonth.format('YYYY年M月')}</span>
 							<span className='text-[11px]'>{now.format('YYYY/M/D ddd')}</span>
 						</div>
-						<button
-							type='button'
-							onClick={() => setVisibleMonth(prev => prev.add(1, 'month'))}
-							className='hover:text-primary flex size-7 items-center justify-center rounded-lg transition-colors'
-							aria-label='下个月'>
-							<ChevronRight size={16} />
-						</button>
+						<div className='flex items-center gap-1'>
+							<button
+								type='button'
+								onClick={() => setVisibleMonth(now.startOf('month'))}
+								disabled={isCurrentMonthVisible}
+								className='hover:text-primary disabled:text-secondary/40 flex size-7 items-center justify-center rounded-lg transition-colors disabled:cursor-default'
+								aria-label='回到今天'
+								title='回到今天'>
+								<CalendarDays size={15} />
+							</button>
+							<button
+								type='button'
+								onClick={() => setVisibleMonth(prev => prev.add(1, 'month'))}
+								className='hover:text-primary flex size-7 items-center justify-center rounded-lg transition-colors'
+								aria-label='下个月'>
+								<ChevronRight size={16} />
+							</button>
+						</div>
 					</div>
 					<ul
 						className={cn(
-							'text-secondary mt-3 grid h-[206px] flex-1 grid-cols-7 gap-1.5 text-sm',
+							'text-secondary mt-3 grid h-[206px] min-h-0 flex-1 grid-cols-7 grid-rows-[18px_repeat(6,minmax(0,1fr))] gap-1.5 text-sm',
 							(styles.height < 240 || styles.width < 240) && 'text-xs'
 						)}>
 						{new Array(7).fill(0).map((_, index) => {
-							const isCurrentWeekday = index === currentWeekday && visibleMonth.isSame(now, 'month')
+							const isCurrentWeekday = index === currentWeekday && isCurrentMonthVisible
 							return (
 								<li key={index} className={cn('flex items-center justify-center font-medium', isCurrentWeekday && 'text-brand')}>
 									{dates[index]}
@@ -209,7 +221,7 @@ export default function CalendarCard() {
 										type='button'
 										onClick={() => openTodoDialog(dateKey)}
 										className={cn(
-											'hover:bg-card/80 relative flex h-full min-h-8 w-full flex-col items-center justify-center rounded-lg border border-transparent text-center transition-colors',
+											'hover:bg-card/80 relative flex h-full min-h-0 w-full flex-col items-center justify-center rounded-lg border border-transparent text-center transition-colors',
 											isToday && 'bg-linear text-primary border-white/50 font-medium',
 											holiday?.type === 'holiday' && !isToday && 'text-red-500',
 											holiday?.type === 'workday' && 'text-amber-600'
