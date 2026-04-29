@@ -13,7 +13,7 @@ import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/hooks/use-auth'
 import initialTodos from '@/app/todos/list.json'
-import { HOLIDAYS_2026 } from '@/app/todos/holidays'
+import { HOLIDAYS_2026, type HolidayInfo } from '@/app/todos/holidays'
 import { pushTodos } from '@/app/todos/services/push-todos'
 import type { TodoItem, TodoMap } from '@/app/todos/types'
 
@@ -28,6 +28,7 @@ export default function CalendarCard() {
 	const [selectedDate, setSelectedDate] = useState<string | null>(null)
 	const [draftTodos, setDraftTodos] = useState<TodoItem[]>([])
 	const [isSaving, setIsSaving] = useState(false)
+	const [hoveredHoliday, setHoveredHoliday] = useState<HolidayInfo | null>(null)
 	const keyInputRef = useRef<HTMLInputElement>(null)
 	const { isAuth, setPrivateKey } = useAuthStore()
 
@@ -156,6 +157,16 @@ export default function CalendarCard() {
 						</>
 					)}
 
+					{hoveredHoliday && (
+						<div
+							className={cn(
+								'pointer-events-none absolute top-10 left-1/2 z-10 -translate-x-1/2 rounded-full border bg-white/85 px-3 py-1 text-xs shadow-sm backdrop-blur-sm',
+								hoveredHoliday.type === 'holiday' ? 'text-red-500' : 'text-amber-600'
+							)}>
+							{hoveredHoliday.name}
+						</div>
+					)}
+
 					<div className='text-secondary flex items-center justify-between text-sm'>
 						<button
 							type='button'
@@ -211,35 +222,36 @@ export default function CalendarCard() {
 							const dateKey = date.format('YYYY-MM-DD')
 							const isToday = dateKey === currentDateKey
 							const holiday = HOLIDAYS_2026[dateKey]
+							const isHoveredHoliday = !!holiday && !!hoveredHoliday && holiday.name === hoveredHoliday.name && holiday.type === hoveredHoliday.type
 							const dayTodos = todos[dateKey] ?? []
 							const doneCount = dayTodos.filter(item => item.done).length
-							const pendingCount = dayTodos.length - doneCount
 
 							return (
 								<li key={day}>
 									<button
 										type='button'
 										onClick={() => openTodoDialog(dateKey)}
+										onMouseEnter={() => setHoveredHoliday(holiday ?? null)}
+										onMouseLeave={() => setHoveredHoliday(null)}
 										className={cn(
 											'hover:bg-card/80 relative flex h-full min-h-0 w-full flex-col items-center justify-center rounded-lg border border-transparent text-center transition-colors',
 											isToday && 'bg-linear text-primary border-white/50 font-medium',
-											holiday?.type === 'holiday' && !isToday && 'text-red-500',
-											holiday?.type === 'workday' && 'text-amber-600'
+											isHoveredHoliday && holiday.type === 'holiday' && 'border-red-300 bg-red-500/10 text-red-500',
+											isHoveredHoliday && holiday.type === 'workday' && 'border-amber-300 bg-amber-500/10 text-amber-600'
 										)}>
 										<span className='leading-none'>{day}</span>
-										{holiday && (
-											<span className='absolute top-0.5 right-0.5 whitespace-nowrap text-[8px] leading-none' title={holiday.name}>
-												{holiday.label}
-											</span>
-										)}
-										{dayTodos.length > 0 && (
-											<span
-												className={cn(
-													'absolute right-1 bottom-1 size-1.5 rounded-full',
-													pendingCount > 0 ? 'bg-brand' : 'bg-emerald-500'
+										{(holiday || dayTodos.length > 0) && (
+											<span className='absolute bottom-1 left-1/2 flex -translate-x-1/2 items-center gap-1'>
+												{holiday && (
+													<span
+														className={cn('size-1.5 rounded-full', holiday.type === 'holiday' ? 'bg-red-500' : 'bg-amber-500')}
+														title={holiday.name}
+													/>
 												)}
-												title={`${dayTodos.length} 个待办，${doneCount} 个完成`}
-											/>
+												{dayTodos.length > 0 && (
+													<span className='size-1.5 rounded-full bg-emerald-500' title={`${dayTodos.length} 个待办，${doneCount} 个完成`} />
+												)}
+											</span>
 										)}
 									</button>
 								</li>
