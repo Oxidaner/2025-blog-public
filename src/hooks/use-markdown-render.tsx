@@ -3,6 +3,7 @@ import parse, { type HTMLReactParserOptions, Element, type DOMNode } from 'html-
 import { renderMarkdown, type TocItem } from '@/lib/markdown-renderer'
 import { MarkdownImage } from '@/components/markdown-image'
 import { CodeBlock } from '@/components/code-block'
+import { MermaidBlock } from '@/components/mermaid-block'
 
 type MarkdownRenderResult = {
 	content: ReactElement | null
@@ -49,28 +50,35 @@ export function useMarkdownRender(markdown: string): MarkdownRenderResult {
 								const { src, alt, title } = domNode.attribs
 								return <MarkdownImage src={src} alt={alt} title={title} />
 							}
+							if (domNode instanceof Element && domNode.name === 'div' && domNode.attribs['data-mermaid-code']) {
+								const code = domNode.attribs['data-mermaid-code']
+									.replace(/&quot;/g, '"')
+									.replace(/&#39;/g, "'")
+									.replace(/&lt;/g, '<')
+									.replace(/&gt;/g, '>')
+									.replace(/&amp;/g, '&')
+								return <MermaidBlock code={code} />
+							}
 							// Handle code block placeholders in text nodes
 							if (domNode.type === 'text' && domNode.data && domNode.data.includes('__CODE_BLOCK_')) {
 								const text = domNode.data
-								const result = text
-												.split(/(__CODE_BLOCK_\d+__)/)
-												.filter(Boolean);
+								const result = text.split(/(__CODE_BLOCK_\d+__)/).filter(Boolean)
 
 								return (
 									<>
 										{result.map((item, index) => {
-											if(item.startsWith('__CODE_BLOCK_')){
+											if (item.startsWith('__CODE_BLOCK_')) {
 												const block = codeBlocks.find(b => b.placeholder === item)
-												if(block){
+												if (block) {
 													const preElement = parse(block.preHtml) as ReactElement
 													return (
-														<CodeBlock key={block.placeholder} code={block.code}>{preElement}</CodeBlock>
+														<CodeBlock key={block.placeholder} code={block.code}>
+															{preElement}
+														</CodeBlock>
 													)
 												}
-											}else{
-												return item
-													? <Fragment key={index}>{item}</Fragment>
-													: null
+											} else {
+												return item ? <Fragment key={index}>{item}</Fragment> : null
 											}
 										})}
 									</>

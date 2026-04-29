@@ -59,7 +59,7 @@ async function loadKatex() {
 export async function renderMarkdown(markdown: string): Promise<MarkdownRenderResult> {
 	// Load optional renderers first so they apply on the FIRST lex/parse pass.
 	// (If we lex before registering extensions, math tokens won't ever be produced on a cold refresh.)
-	const codeBlockMap = new Map<string, { html: string; original: string }>()
+	const codeBlockMap = new Map<string, { kind: 'code'; html: string; original: string } | { kind: 'mermaid'; original: string }>()
 	const [shiki, katex] = await Promise.all([loadShiki(), loadKatex()])
 
 	// Render HTML with heading ids
@@ -77,6 +77,9 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 			// Add data-code attribute with original code for copy functionality
 			// Escape HTML entities for attribute value
 			const escapedCode = codeData.original.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+			if (codeData.kind === 'mermaid') {
+				return `<div class="mermaid-block" data-mermaid-code="${escapedCode}"></div>`
+			}
 			if (codeData.html) {
 				// Shiki highlighted code
 				return `<pre data-code="${escapedCode}">${codeData.html}</pre>`
@@ -206,6 +209,13 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 			const codeToken = token as Tokens.Code
 			const originalCode = codeToken.text
 			const key = `__SHIKI_CODE_${codeBlockMap.size}__`
+			const lang = (codeToken.lang || '').split(/\s+/)[0].toLowerCase()
+
+			if (lang === 'mermaid') {
+				codeBlockMap.set(key, { kind: 'mermaid', original: originalCode })
+				codeToken.text = key
+				continue
+			}
 
 			if (shiki) {
 				try {
@@ -213,16 +223,16 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 						lang: codeToken.lang || 'text',
 						theme: 'one-light'
 					})
-					codeBlockMap.set(key, { html, original: originalCode })
+					codeBlockMap.set(key, { kind: 'code', html, original: originalCode })
 					codeToken.text = key
 				} catch {
 					// Keep original if highlighting fails
-					codeBlockMap.set(key, { html: '', original: originalCode })
+					codeBlockMap.set(key, { kind: 'code', html: '', original: originalCode })
 					codeToken.text = key
 				}
 			} else {
 				// Fallback when shiki is not available
-				codeBlockMap.set(key, { html: '', original: originalCode })
+				codeBlockMap.set(key, { kind: 'code', html: '', original: originalCode })
 				codeToken.text = key
 			}
 		}

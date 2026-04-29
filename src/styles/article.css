@@ -158,7 +158,9 @@
 	border-radius: 6px;
 	cursor: pointer;
 	opacity: 0;
-	transition: opacity 0.2s, background 0.2s;
+	transition:
+		opacity 0.2s,
+		background 0.2s;
 	z-index: 10;
 }
 
@@ -173,6 +175,50 @@
 
 .prose .code-block-copy-btn:active {
 	transform: scale(0.95);
+}
+
+/* Mermaid */
+.prose .mermaid-block {
+	width: 100%;
+	margin: 1.25em 0 2em;
+	overflow-x: auto;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0.55);
+	padding: 1rem;
+}
+
+.prose .mermaid-block svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;
+}
+
+.prose .mermaid-block-loading,
+.prose .mermaid-block-error {
+	color: var(--color-secondary);
+	font-size: 0.9em;
+}
+
+.prose .mermaid-block-error {
+	border-color: rgba(220, 38, 38, 0.25);
+	background: rgba(254, 242, 242, 0.75);
+	color: #b91c1c;
+}
+
+.prose .mermaid-block-error-title {
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+}
+
+.prose .mermaid-block-error pre {
+	margin: 0;
+	white-space: pre-wrap;
+	border: 0;
+	background: transparent;
+	padding: 0;
+	color: inherit;
 }
 
 /* Images */
