@@ -227,7 +227,11 @@ export default function CalendarCard() {
 											holiday?.type === 'workday' && 'text-amber-600'
 										)}>
 										<span className='leading-none'>{day}</span>
-										{holiday && <span className='mt-0.5 max-w-full truncate text-[9px] leading-none'>{holiday.label}</span>}
+										{holiday && (
+											<span className='absolute top-0.5 right-0.5 whitespace-nowrap text-[8px] leading-none' title={holiday.name}>
+												{holiday.label}
+											</span>
+										)}
 										{dayTodos.length > 0 && (
 											<span
 												className={cn(
