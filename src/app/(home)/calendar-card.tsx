@@ -239,9 +239,9 @@ export default function CalendarCard() {
 											isHoveredHoliday && holiday.type === 'holiday' && 'border-red-300 bg-red-500/10 text-red-500',
 											isHoveredHoliday && holiday.type === 'workday' && 'border-amber-300 bg-amber-500/10 text-amber-600'
 										)}>
-										<span className='leading-none'>{day}</span>
+										<span className={cn('leading-none', (holiday || dayTodos.length > 0) && '-translate-y-1.5')}>{day}</span>
 										{(holiday || dayTodos.length > 0) && (
-											<span className='absolute bottom-1 left-1/2 flex -translate-x-1/2 items-center gap-1'>
+											<span className='absolute bottom-0.5 left-1/2 flex -translate-x-1/2 items-center gap-1'>
 												{holiday && (
 													<span
 														className={cn('size-1.5 rounded-full', holiday.type === 'holiday' ? 'bg-red-500' : 'bg-amber-500')}
