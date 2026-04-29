@@ -1,5 +1,15 @@
 [
   {
+    "slug": "Dubbo-Admin-MCP",
+    "title": "Dubbo Admin MCP 设计解析：让 AI 助手查询 Dubbo 集群",
+    "tags": [],
+    "date": "2026-04-29T12:13",
+    "summary": "Dubbo Admin MCP 设计解析",
+    "cover": "/blogs/Dubbo-Admin-MCP/beae0a52eba6ac3f.png",
+    "hidden": false,
+    "category": "开源"
+  },
+  {
     "slug": "dubbo-admin-rag",
     "title": " Dubbo Admin RAG 重构逻辑：从“查资料”到“检索流水线”",
     "tags": [],
