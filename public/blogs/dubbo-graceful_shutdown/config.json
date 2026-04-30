@@ -1,9 +1,13 @@
 {
   "title": "Dubbo-Go 优雅下线链路详解",
-  "tags": [],
+  "tags": [
+    "dubbo",
+    "dubbo-go",
+    "graceful-shutdown"
+  ],
   "date": "2026-03-20T09:53",
   "summary": "Dubbo-Go 优雅下线链路详解",
   "cover": "/blogs/dubbo-graceful_shutdown/af1995b341d1efa1.jpeg",
   "hidden": false,
-  "category": ""
+  "category": "开源"
 }

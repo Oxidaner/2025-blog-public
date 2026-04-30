@@ -1,6 +1,10 @@
 {
   "title": "Dubbo Admin MCP 设计解析：让 AI 助手查询 Dubbo 集群",
-  "tags": [],
+  "tags": [
+    "dubbo-admin",
+    "MCP",
+    "dubbo"
+  ],
   "date": "2026-04-29T12:13",
   "summary": "Dubbo Admin MCP 设计解析",
   "cover": "/blogs/Dubbo-Admin-MCP/beae0a52eba6ac3f.png",

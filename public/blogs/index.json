@@ -2,7 +2,11 @@
   {
     "slug": "Dubbo-Admin-MCP",
     "title": "Dubbo Admin MCP 设计解析：让 AI 助手查询 Dubbo 集群",
-    "tags": [],
+    "tags": [
+      "dubbo-admin",
+      "MCP",
+      "dubbo"
+    ],
     "date": "2026-04-29T12:13",
     "summary": "Dubbo Admin MCP 设计解析",
     "cover": "/blogs/Dubbo-Admin-MCP/beae0a52eba6ac3f.png",
@@ -12,7 +16,11 @@
   {
     "slug": "dubbo-admin-rag",
     "title": " Dubbo Admin RAG 重构逻辑：从“查资料”到“检索流水线”",
-    "tags": [],
+    "tags": [
+      "dubbo-admin",
+      "dubbo",
+      "RAG"
+    ],
     "date": "2026-04-29T12:09",
     "summary": " Dubbo Admin RAG 重构逻辑",
     "cover": "/blogs/dubbo-admin-rag/6c2a6544995886f6.png",
@@ -22,7 +30,11 @@
   {
     "slug": "graceful_shutdown-compare",
     "title": "Dubbo 优雅下线：dubbo-go 和 dubbo-java 的设计对比",
-    "tags": [],
+    "tags": [
+      "dubbo",
+      "dubbo-go",
+      "graceful-shutdown"
+    ],
     "date": "2026-03-28T09:32",
     "summary": "Dubbo 优雅下线：dubbo-go 和 dubbo-java 的设计对比",
     "cover": "/blogs/graceful_shutdown-compare/af1995b341d1efa1.jpeg",
@@ -32,12 +44,16 @@
   {
     "slug": "dubbo-graceful_shutdown",
     "title": "Dubbo-Go 优雅下线链路详解",
-    "tags": [],
+    "tags": [
+      "dubbo",
+      "dubbo-go",
+      "graceful-shutdown"
+    ],
     "date": "2026-03-20T09:53",
     "summary": "Dubbo-Go 优雅下线链路详解",
     "cover": "/blogs/dubbo-graceful_shutdown/af1995b341d1efa1.jpeg",
     "hidden": false,
-    "category": ""
+    "category": "开源"
   },
   {
     "slug": "claudecode-install",
