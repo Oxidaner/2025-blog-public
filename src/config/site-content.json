@@ -1,6 +1,6 @@
 {
 	"meta": {
-		"title": "Adultery is welcome.",
+		"title": "Welcome to watch.",
 		"description": "Oxidaner 的个人博客，记录Agent开发、探索、笔记。开源代码仓库。",
 		"username": "Oxidaner"
 	},
@@ -69,7 +69,7 @@
 	"isCachePem": false,
 	"hideEditButton": false,
 	"enableCategories": true,
-	"currentHatIndex": 17,
+	"currentHatIndex": 1,
 	"hatFlipped": false,
 	"enableChristmas": false,
 	"beian": {
