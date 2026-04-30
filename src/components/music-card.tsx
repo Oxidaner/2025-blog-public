@@ -8,11 +8,11 @@ import { CARD_SPACING } from '@/consts'
 import MusicSVG from '@/svgs/music.svg'
 import PlaySVG from '@/svgs/play.svg'
 import { HomeDraggableLayer } from '../app/(home)/home-draggable-layer'
-import { Pause } from 'lucide-react'
+import { Pause, SkipForward } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
-
-const MUSIC_FILES = ['/music/close-to-you.mp3']
+import { getNextTrackIndex, MUSIC_TRACKS } from '@/lib/music-playlist'
+import { getHomeMusicCardPosition } from '@/lib/home-card-position'
 
 export default function MusicCard() {
 	const pathname = usePathname()
@@ -20,14 +20,16 @@ export default function MusicCard() {
 	const { cardStyles, siteContent } = useConfigStore()
 	const styles = cardStyles.musicCard
 	const hiCardStyles = cardStyles.hiCard
-	const clockCardStyles = cardStyles.clockCard
-	const calendarCardStyles = cardStyles.calendarCard
+	const socialButtonsStyles = cardStyles.socialButtons
+	const shareCardStyles = cardStyles.shareCard
+	const likePositionStyles = cardStyles.likePosition
 
 	const [isPlaying, setIsPlaying] = useState(false)
 	const [currentIndex, setCurrentIndex] = useState(0)
 	const [progress, setProgress] = useState(0)
 	const audioRef = useRef<HTMLAudioElement | null>(null)
 	const currentIndexRef = useRef(0)
+	const currentTrack = MUSIC_TRACKS[currentIndex] ?? MUSIC_TRACKS[0]
 
 	const isHomePage = pathname === '/'
 
@@ -41,11 +43,18 @@ export default function MusicCard() {
 		}
 
 		// Default position on home page
-		return {
-			x: styles.offsetX !== null ? center.x + styles.offsetX : center.x + CARD_SPACING + hiCardStyles.width / 2 - styles.offset,
-			y: styles.offsetY !== null ? center.y + styles.offsetY : center.y - clockCardStyles.offset + CARD_SPACING + calendarCardStyles.height + CARD_SPACING
-		}
-	}, [isPlaying, isHomePage, center, styles, hiCardStyles, clockCardStyles, calendarCardStyles])
+		return getHomeMusicCardPosition(
+			center,
+			{
+				hiCard: hiCardStyles,
+				socialButtons: socialButtonsStyles,
+				shareCard: shareCardStyles,
+				likePosition: likePositionStyles,
+				musicCard: styles
+			},
+			CARD_SPACING
+		)
+	}, [isHomePage, center, styles, hiCardStyles, socialButtonsStyles, shareCardStyles, likePositionStyles])
 
 	const { x, y } = position
 
@@ -64,7 +73,7 @@ export default function MusicCard() {
 		}
 
 		const handleEnded = () => {
-			const nextIndex = (currentIndexRef.current + 1) % MUSIC_FILES.length
+			const nextIndex = getNextTrackIndex(currentIndexRef.current, MUSIC_TRACKS.length)
 			currentIndexRef.current = nextIndex
 			setCurrentIndex(nextIndex)
 			setProgress(0)
@@ -78,14 +87,21 @@ export default function MusicCard() {
 			updateProgress()
 		}
 
+		const handleAudioError = () => {
+			setIsPlaying(false)
+			setProgress(0)
+		}
+
 		audio.addEventListener('timeupdate', handleTimeUpdate)
 		audio.addEventListener('ended', handleEnded)
 		audio.addEventListener('loadedmetadata', handleLoadedMetadata)
+		audio.addEventListener('error', handleAudioError)
 
 		return () => {
 			audio.removeEventListener('timeupdate', handleTimeUpdate)
 			audio.removeEventListener('ended', handleEnded)
 			audio.removeEventListener('loadedmetadata', handleLoadedMetadata)
+			audio.removeEventListener('error', handleAudioError)
 		}
 	}, [])
 
@@ -95,22 +111,28 @@ export default function MusicCard() {
 		if (audioRef.current) {
 			const wasPlaying = !audioRef.current.paused
 			audioRef.current.pause()
-			audioRef.current.src = MUSIC_FILES[currentIndex]
+			audioRef.current.src = currentTrack.src
 			audioRef.current.loop = false
 			setProgress(0)
 
 			if (wasPlaying) {
-				audioRef.current.play().catch(console.error)
+				audioRef.current.play().catch(error => {
+					console.error(error)
+					setIsPlaying(false)
+				})
 			}
 		}
-	}, [currentIndex])
+	}, [currentIndex, currentTrack.src])
 
 	// Handle play/pause state change
 	useEffect(() => {
 		if (!audioRef.current) return
 
 		if (isPlaying) {
-			audioRef.current.play().catch(console.error)
+			audioRef.current.play().catch(error => {
+				console.error(error)
+				setIsPlaying(false)
+			})
 		} else {
 			audioRef.current.pause()
 		}
@@ -128,6 +150,10 @@ export default function MusicCard() {
 
 	const togglePlayPause = () => {
 		setIsPlaying(!isPlaying)
+	}
+
+	const switchToNextTrack = () => {
+		setCurrentIndex(index => getNextTrackIndex(index, MUSIC_TRACKS.length))
 	}
 
 	// Hide component if not on home page and not playing
@@ -155,15 +181,21 @@ export default function MusicCard() {
 					</>
 				)}
 
-				<MusicSVG className='h-8 w-8' />
+				<button type='button' onClick={switchToNextTrack} className='flex min-w-0 flex-1 items-center gap-3 text-left' title='切换下一首'>
+					<MusicSVG className='h-8 w-8 shrink-0' />
 
-				<div className='flex-1'>
-					<div className='text-secondary text-sm'>Close To You</div>
+					<div className='min-w-0 flex-1'>
+						<div className='text-secondary flex items-center gap-1.5 text-sm'>
+							<span className='truncate'>{currentTrack.title}</span>
+							<SkipForward size={13} className='shrink-0 opacity-55' />
+						</div>
+						{currentTrack.artist && <div className='text-secondary/70 mt-0.5 truncate text-[11px]'>{currentTrack.artist}</div>}
 
-					<div className='mt-1 h-2 rounded-full bg-white/60'>
-						<div className='bg-linear h-full rounded-full transition-all duration-300' style={{ width: `${progress}%` }} />
+						<div className='mt-1 h-2 rounded-full bg-white/60'>
+							<div className='bg-linear h-full rounded-full transition-all duration-300' style={{ width: `${progress}%` }} />
+						</div>
 					</div>
-				</div>
+				</button>
 
 				<button onClick={togglePlayPause} className='flex h-10 w-10 items-center justify-center rounded-full bg-white transition-opacity hover:opacity-80'>
 					{isPlaying ? <Pause className='text-brand h-4 w-4' /> : <PlaySVG className='text-brand ml-1 h-4 w-4' />}

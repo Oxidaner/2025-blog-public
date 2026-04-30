@@ -53,6 +53,10 @@ export default function HiCard() {
 				<h1 className='font-averia mt-3 text-2xl'>
 					{greeting} <br /> I'm <span className='text-linear text-[32px]'>{username}</span> , Nice to <br /> meet you!
 				</h1>
+				<div className='text-secondary mt-4 inline-flex items-center gap-2 rounded-full border bg-white/45 px-3 py-1 text-xs'>
+					<kbd className='text-primary rounded-md bg-white/70 px-1.5 py-0.5 font-mono text-[11px]'>Ctrl/Cmd K</kbd>
+					<span>打开指令面板</span>
+				</div>
 			</Card>
 		</HomeDraggableLayer>
 	)

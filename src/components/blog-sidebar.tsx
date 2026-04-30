@@ -6,6 +6,7 @@ import LikeButton from '@/components/like-button'
 import { BlogToc } from '@/components/blog-toc'
 import { ScrollTopButton } from '@/components/scroll-top-button'
 import { useConfigStore } from '@/app/(home)/stores/config-store'
+import { ReadingDashboard } from '@/components/reading-dashboard'
 
 type TocItem = {
 	id: string
@@ -18,9 +19,11 @@ type BlogSidebarProps = {
 	summary?: string
 	toc: TocItem[]
 	slug?: string
+	wordCount: number
+	readingMinutes: number
 }
 
-export function BlogSidebar({ cover, summary, toc, slug }: BlogSidebarProps) {
+export function BlogSidebar({ cover, summary, toc, slug, wordCount, readingMinutes }: BlogSidebarProps) {
 	const { siteContent } = useConfigStore()
 	const summaryInContent = siteContent.summaryInContent ?? false
 
@@ -47,11 +50,13 @@ export function BlogSidebar({ cover, summary, toc, slug }: BlogSidebarProps) {
 				</motion.div>
 			)}
 
-			<BlogToc toc={toc} delay={INIT_DELAY + ANIMATION_DELAY * 3} />
+			<ReadingDashboard toc={toc} wordCount={wordCount} readingMinutes={readingMinutes} delay={INIT_DELAY + ANIMATION_DELAY * 3} />
 
-			<LikeButton slug={slug} delay={(INIT_DELAY + ANIMATION_DELAY * 4) * 1000} />
+			<BlogToc toc={toc} delay={INIT_DELAY + ANIMATION_DELAY * 4} />
 
-			<ScrollTopButton delay={INIT_DELAY + ANIMATION_DELAY * 5} />
+			<LikeButton slug={slug} delay={(INIT_DELAY + ANIMATION_DELAY * 5) * 1000} />
+
+			<ScrollTopButton delay={INIT_DELAY + ANIMATION_DELAY * 6} />
 		</div>
 	)
 }

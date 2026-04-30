@@ -22,6 +22,7 @@ import { toast } from 'sonner'
 import { useSize } from '@/hooks/use-size'
 import { HomeDraggableLayer } from './home-draggable-layer'
 import { createPortal } from 'react-dom'
+import { getHomeSocialButtonsPosition } from '@/lib/home-card-position'
 
 type SocialButtonType =
 	| 'github'
@@ -104,8 +105,7 @@ export default function SocialButtons() {
 		}
 	}, [openDropdowns])
 
-	const x = styles.offsetX !== null ? center.x + styles.offsetX : center.x + hiCardStyles.width / 2 - styles.width
-	const y = styles.offsetY !== null ? center.y + styles.offsetY : center.y + hiCardStyles.height / 2 + CARD_SPACING
+	const { x, y } = getHomeSocialButtonsPosition(center, { hiCard: hiCardStyles, socialButtons: styles }, CARD_SPACING)
 
 	if (!showStates.container) return null
 

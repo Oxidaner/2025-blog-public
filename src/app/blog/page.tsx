@@ -22,8 +22,9 @@ import { saveBlogEdits } from './services/save-blog-edits'
 import { Check } from 'lucide-react'
 import { BlogCoverHoverPreview, useBlogCoverHover } from './components/blog-cover-hover'
 import { CategoryModal } from './components/category-modal'
+import { ArticleGraphView } from './components/article-graph-view'
 
-type DisplayMode = 'day' | 'week' | 'month' | 'year' | 'category'
+type DisplayMode = 'day' | 'week' | 'month' | 'year' | 'category' | 'graph'
 
 export default function BlogPage() {
 	const { items, loading } = useBlogIndex()
@@ -45,6 +46,12 @@ export default function BlogPage() {
 	const [newCategory, setNewCategory] = useState('')
 
 	const { cancelCoverPreview, onCoverLinkMouseEnter, hoverCoverPreview, mousePosition } = useBlogCoverHover(editMode)
+
+	useEffect(() => {
+		if (editMode && displayMode === 'graph') {
+			setDisplayMode('year')
+		}
+	}, [editMode, displayMode])
 
 	useEffect(() => {
 		if (!editMode) {
@@ -338,6 +345,7 @@ export default function BlogPage() {
 							{ value: 'week', label: '周' },
 							{ value: 'month', label: '月' },
 							{ value: 'year', label: '年' },
+							...(!editMode ? ([{ value: 'graph', label: '图谱' }] as const) : []),
 							...(enableCategories ? ([{ value: 'category', label: '分类' }] as const) : [])
 						].map(option => (
 							<motion.button
@@ -355,100 +363,104 @@ export default function BlogPage() {
 					</motion.div>
 				)}
 
-				{groupKeys.map((groupKey, index) => {
-					const group = groupedItems[groupKey]
-					if (!group) return null
+				{displayMode === 'graph' ? (
+					<ArticleGraphView items={displayItems} />
+				) : (
+					groupKeys.map((groupKey, index) => {
+						const group = groupedItems[groupKey]
+						if (!group) return null
 
-					return (
-						<motion.div
-							onMouseLeave={cancelCoverPreview}
-							key={groupKey}
-							initial={{ opacity: 0, scale: 0.95 }}
-							whileInView={{ opacity: 1, scale: 1 }}
-							transition={{ delay: INIT_DELAY / 2 }}
-							className='card relative w-full max-w-[840px] space-y-6'>
-							<div className='mb-3 flex items-center justify-between gap-3 text-base'>
-								<div className='flex items-center gap-3'>
-									<div className='font-medium'>{getGroupLabel(groupKey)}</div>
-									<div className='h-2 w-2 rounded-full bg-[#D9D9D9]'></div>
-									<div className='text-secondary text-sm'>{group.items.length} 篇文章</div>
-								</div>
-								{editMode &&
-									(() => {
-										const groupAllSelected = group.items.every(item => selectedSlugs.has(item.slug))
-										return (
-											<motion.button
-												whileHover={{ scale: 1.05 }}
-												whileTap={{ scale: 0.95 }}
-												onClick={() => handleSelectGroup(groupKey)}
-												className={cn(
-													'rounded-lg border px-3 py-1 text-xs transition-colors',
-													groupAllSelected
-														? 'border-brand/40 bg-brand/10 text-brand hover:bg-brand/20'
-														: 'text-secondary hover:border-brand/40 hover:text-brand border-transparent bg-white/60 hover:bg-white/80'
-												)}>
-												{groupAllSelected ? '取消全选' : '全选该分组'}
-											</motion.button>
-										)
-									})()}
-							</div>
-							<div>
-								{group.items.map(it => {
-									const hasRead = isRead(it.slug)
-									const isSelected = selectedSlugs.has(it.slug)
-									return (
-										<Link
-											onMouseEnter={() => onCoverLinkMouseEnter(it.cover)}
-											onMouseLeave={cancelCoverPreview}
-											href={`/blog/${it.slug}`}
-											key={it.slug}
-											onClick={event => handleItemClick(event, it.slug)}
-											className={cn(
-												'group flex min-h-10 items-center gap-3 py-3 transition-all',
-												editMode
-													? cn(
-															'rounded-lg border px-3',
-															isSelected ? 'border-brand/60 bg-brand/5' : 'hover:border-brand/40 border-transparent hover:bg-white/60'
-														)
-													: 'cursor-pointer'
-											)}>
-											{editMode && (
-												<span
+						return (
+							<motion.div
+								onMouseLeave={cancelCoverPreview}
+								key={groupKey}
+								initial={{ opacity: 0, scale: 0.95 }}
+								whileInView={{ opacity: 1, scale: 1 }}
+								transition={{ delay: INIT_DELAY / 2 }}
+								className='card relative w-full max-w-[840px] space-y-6'>
+								<div className='mb-3 flex items-center justify-between gap-3 text-base'>
+									<div className='flex items-center gap-3'>
+										<div className='font-medium'>{getGroupLabel(groupKey)}</div>
+										<div className='h-2 w-2 rounded-full bg-[#D9D9D9]'></div>
+										<div className='text-secondary text-sm'>{group.items.length} 篇文章</div>
+									</div>
+									{editMode &&
+										(() => {
+											const groupAllSelected = group.items.every(item => selectedSlugs.has(item.slug))
+											return (
+												<motion.button
+													whileHover={{ scale: 1.05 }}
+													whileTap={{ scale: 0.95 }}
+													onClick={() => handleSelectGroup(groupKey)}
 													className={cn(
-														'flex h-4 w-4 items-center justify-center rounded-full border text-[10px] font-semibold',
-														isSelected ? 'border-brand bg-brand text-white' : 'border-[#D9D9D9] text-transparent'
+														'rounded-lg border px-3 py-1 text-xs transition-colors',
+														groupAllSelected
+															? 'border-brand/40 bg-brand/10 text-brand hover:bg-brand/20'
+															: 'text-secondary hover:border-brand/40 hover:text-brand border-transparent bg-white/60 hover:bg-white/80'
 													)}>
-													<Check />
-												</span>
-											)}
-											<span className='text-secondary w-[44px] shrink-0 text-sm font-medium'>{dayjs(it.date).format('MM-DD')}</span>
-
-											<div className='relative flex h-2 w-2 items-center justify-center'>
-												<div className='bg-secondary group-hover:bg-brand h-[5px] w-[5px] rounded-full transition-all group-hover:h-4'></div>
-												<ShortLineSVG className='absolute bottom-4' />
-											</div>
-											<div
+													{groupAllSelected ? '取消全选' : '全选该分组'}
+												</motion.button>
+											)
+										})()}
+								</div>
+								<div>
+									{group.items.map(it => {
+										const hasRead = isRead(it.slug)
+										const isSelected = selectedSlugs.has(it.slug)
+										return (
+											<Link
+												onMouseEnter={() => onCoverLinkMouseEnter(it.cover)}
+												onMouseLeave={cancelCoverPreview}
+												href={`/blog/${it.slug}`}
+												key={it.slug}
+												onClick={event => handleItemClick(event, it.slug)}
 												className={cn(
-													'flex-1 truncate text-sm font-medium transition-all',
-													editMode ? null : 'group-hover:text-brand group-hover:translate-x-2'
+													'group flex min-h-10 items-center gap-3 py-3 transition-all',
+													editMode
+														? cn(
+																'rounded-lg border px-3',
+																isSelected ? 'border-brand/60 bg-brand/5' : 'hover:border-brand/40 border-transparent hover:bg-white/60'
+															)
+														: 'cursor-pointer'
 												)}>
-												{it.title || it.slug}
-												{hasRead && <span className='text-secondary ml-2 text-xs'>[已阅读]</span>}
-											</div>
-											<div className='flex flex-wrap items-center gap-2 max-sm:hidden'>
-												{(it.tags || []).map(t => (
-													<span key={t} className='text-secondary text-sm'>
-														#{t}
+												{editMode && (
+													<span
+														className={cn(
+															'flex h-4 w-4 items-center justify-center rounded-full border text-[10px] font-semibold',
+															isSelected ? 'border-brand bg-brand text-white' : 'border-[#D9D9D9] text-transparent'
+														)}>
+														<Check />
 													</span>
-												))}
-											</div>
-										</Link>
-									)
-								})}
-							</div>
-						</motion.div>
-					)
-				})}
+												)}
+												<span className='text-secondary w-[44px] shrink-0 text-sm font-medium'>{dayjs(it.date).format('MM-DD')}</span>
+
+												<div className='relative flex h-2 w-2 items-center justify-center'>
+													<div className='bg-secondary group-hover:bg-brand h-[5px] w-[5px] rounded-full transition-all group-hover:h-4'></div>
+													<ShortLineSVG className='absolute bottom-4' />
+												</div>
+												<div
+													className={cn(
+														'flex-1 truncate text-sm font-medium transition-all',
+														editMode ? null : 'group-hover:text-brand group-hover:translate-x-2'
+													)}>
+													{it.title || it.slug}
+													{hasRead && <span className='text-secondary ml-2 text-xs'>[已阅读]</span>}
+												</div>
+												<div className='flex flex-wrap items-center gap-2 max-sm:hidden'>
+													{(it.tags || []).map(t => (
+														<span key={t} className='text-secondary text-sm'>
+															#{t}
+														</span>
+													))}
+												</div>
+											</Link>
+										)
+									})}
+								</div>
+							</motion.div>
+						)
+					})
+				)}
 				{items.length > 0 && (
 					<div className='text-center'>
 						<motion.a

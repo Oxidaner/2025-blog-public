@@ -200,7 +200,7 @@ export default function CalendarCard() {
 					</div>
 					<ul
 						className={cn(
-							'text-secondary mt-3 grid h-[206px] min-h-0 flex-1 grid-cols-7 grid-rows-[18px_repeat(6,minmax(0,1fr))] gap-1.5 text-sm',
+							'text-secondary mt-4 grid h-[244px] min-h-0 flex-1 grid-cols-7 grid-rows-[20px_repeat(6,minmax(0,1fr))] gap-2 text-sm',
 							(styles.height < 240 || styles.width < 240) && 'text-xs'
 						)}>
 						{new Array(7).fill(0).map((_, index) => {
@@ -234,25 +234,20 @@ export default function CalendarCard() {
 										onMouseEnter={() => setHoveredHoliday(holiday ?? null)}
 										onMouseLeave={() => setHoveredHoliday(null)}
 										className={cn(
-											'hover:bg-card/80 relative flex h-full min-h-0 w-full flex-col items-center justify-center rounded-lg border border-transparent text-center transition-colors',
+											'hover:bg-card/80 grid h-full min-h-0 w-full grid-rows-[1fr_10px] place-items-center rounded-lg border border-transparent text-center transition-colors',
 											isToday && 'bg-linear text-primary border-white/50 font-medium',
 											isHoveredHoliday && holiday.type === 'holiday' && 'border-red-300 bg-red-500/10 text-red-500',
 											isHoveredHoliday && holiday.type === 'workday' && 'border-amber-300 bg-amber-500/10 text-amber-600'
 										)}>
-										<span className={cn('leading-none', (holiday || dayTodos.length > 0) && '-translate-y-1.5')}>{day}</span>
-										{(holiday || dayTodos.length > 0) && (
-											<span className='absolute bottom-0.5 left-1/2 flex -translate-x-1/2 items-center gap-1'>
-												{holiday && (
-													<span
-														className={cn('size-1.5 rounded-full', holiday.type === 'holiday' ? 'bg-red-500' : 'bg-amber-500')}
-														title={holiday.name}
-													/>
-												)}
-												{dayTodos.length > 0 && (
-													<span className='size-1.5 rounded-full bg-emerald-500' title={`${dayTodos.length} 个待办，${doneCount} 个完成`} />
-												)}
-											</span>
-										)}
+										<span className='self-end pb-0.5 leading-none'>{day}</span>
+										<span className='flex h-2.5 items-center justify-center gap-1'>
+											{holiday && (
+												<span className={cn('size-1.5 rounded-full', holiday.type === 'holiday' ? 'bg-red-500' : 'bg-amber-500')} title={holiday.name} />
+											)}
+											{dayTodos.length > 0 && (
+												<span className='size-1.5 rounded-full bg-emerald-500' title={`${dayTodos.length} 个待办，${doneCount} 个完成`} />
+											)}
+										</span>
 									</button>
 								</li>
 							)
@@ -268,9 +263,7 @@ export default function CalendarCard() {
 							<div>
 								<h3 className='text-primary text-lg font-semibold'>{dayjs(selectedDate).format('YYYY年M月D日 dddd')}</h3>
 								{selectedHoliday && (
-									<p className={cn('mt-1 text-sm', selectedHoliday.type === 'holiday' ? 'text-red-500' : 'text-amber-600')}>
-										{selectedHoliday.name}
-									</p>
+									<p className={cn('mt-1 text-sm', selectedHoliday.type === 'holiday' ? 'text-red-500' : 'text-amber-600')}>{selectedHoliday.name}</p>
 								)}
 							</div>
 							<button

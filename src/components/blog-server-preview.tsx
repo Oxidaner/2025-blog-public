@@ -2,6 +2,7 @@ import siteContent from '@/config/site-content.json'
 import { BlogArticleEnhancements } from '@/components/blog-article-enhancements'
 import { BlogSidebar } from '@/components/blog-sidebar'
 import type { TocItem } from '@/lib/markdown-renderer'
+import { estimateReadingStats } from '@/lib/reading-metrics'
 
 type BlogServerPreviewProps = {
 	html: string
@@ -16,6 +17,7 @@ type BlogServerPreviewProps = {
 
 export function BlogServerPreview({ html, toc, title, tags, date, summary, cover, slug }: BlogServerPreviewProps) {
 	const summaryInContent = siteContent.summaryInContent ?? false
+	const readingStats = estimateReadingStats(html)
 
 	return (
 		<div className='mx-auto flex max-w-[1140px] justify-center gap-6 px-6 pt-28 pb-12 max-sm:px-0'>
@@ -38,7 +40,7 @@ export function BlogServerPreview({ html, toc, title, tags, date, summary, cover
 				<BlogArticleEnhancements />
 			</article>
 
-			<BlogSidebar cover={cover} summary={summary} toc={toc} slug={slug} />
+			<BlogSidebar cover={cover} summary={summary} toc={toc} slug={slug} wordCount={readingStats.wordCount} readingMinutes={readingStats.readingMinutes} />
 		</div>
 	)
 }

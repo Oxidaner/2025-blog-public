@@ -6,6 +6,7 @@ import { useMarkdownRender } from '@/hooks/use-markdown-render'
 import { useSize } from '@/hooks/use-size'
 import { BlogSidebar } from '@/components/blog-sidebar'
 import { useConfigStore } from '@/app/(home)/stores/config-store'
+import { estimateReadingStats } from '@/lib/reading-metrics'
 
 type BlogPreviewProps = {
 	markdown: string
@@ -22,6 +23,7 @@ export function BlogPreview({ markdown, title, tags, date, summary, cover, slug 
 	const { content, toc, loading } = useMarkdownRender(markdown)
 	const { siteContent } = useConfigStore()
 	const summaryInContent = siteContent.summaryInContent ?? false
+	const readingStats = estimateReadingStats(markdown)
 
 	if (loading) {
 		return <div className='text-secondary flex h-full items-center justify-center text-sm'>渲染中...</div>
@@ -51,7 +53,9 @@ export function BlogPreview({ markdown, title, tags, date, summary, cover, slug 
 				</div>
 			</motion.article>
 
-			{!isMobile && <BlogSidebar cover={cover} summary={summary} toc={toc} slug={slug} />}
+			{!isMobile && (
+				<BlogSidebar cover={cover} summary={summary} toc={toc} slug={slug} wordCount={readingStats.wordCount} readingMinutes={readingStats.readingMinutes} />
+			)}
 		</div>
 	)
 }

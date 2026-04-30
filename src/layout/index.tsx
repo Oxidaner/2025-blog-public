@@ -9,6 +9,7 @@ import { useSize, useSizeInit } from '@/hooks/use-size'
 import { useConfigStore } from '@/app/(home)/stores/config-store'
 import { ScrollTopButton } from '@/components/scroll-top-button'
 import MusicCard from '@/components/music-card'
+import { CommandPalette } from '@/components/command-palette'
 
 export default function Layout({ children }: PropsWithChildren) {
 	useCenterInit()
@@ -55,6 +56,7 @@ export default function Layout({ children }: PropsWithChildren) {
 			<main className='relative z-10 h-full'>
 				{children}
 				<NavCard />
+				<CommandPalette />
 
 				{!maxSM && cardStyles.musicCard?.enabled !== false && <MusicCard />}
 			</main>
