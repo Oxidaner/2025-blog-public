@@ -4,10 +4,10 @@ import path from 'node:path'
 import siteContent from '@/config/site-content.json'
 import blogIndex from '@/../public/blogs/index.json'
 import type { BlogIndexItem } from '@/app/blog/types'
+import { getSiteOrigin } from '@/lib/site-url'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.yysuni.com'
 const FEED_PATH = '/rss.xml'
-const SITE_ORIGIN = SITE_URL.replace(/\/$/, '')
+const SITE_ORIGIN = getSiteOrigin()
 const FEED_URL = `${SITE_ORIGIN}${FEED_PATH}`
 const PUBLIC_DIR = path.join(process.cwd(), 'public')
 

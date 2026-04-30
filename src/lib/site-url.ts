@@ -1,0 +1,27 @@
+type EnvLike = Record<string, string | undefined>
+
+const DEFAULT_SITE_ORIGIN = 'http://localhost:3000'
+
+function normalizeOrigin(value: string): string {
+	const raw = value.trim()
+	if (!raw) return DEFAULT_SITE_ORIGIN
+	const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`
+
+	try {
+		return new URL(withProtocol).origin
+	} catch {
+		return DEFAULT_SITE_ORIGIN
+	}
+}
+
+export function getSiteOrigin(env: EnvLike = process.env): string {
+	const configured = env.SITE_URL || env.NEXT_PUBLIC_SITE_URL || env.VERCEL_URL || env.CF_PAGES_URL
+	return configured ? normalizeOrigin(configured) : DEFAULT_SITE_ORIGIN
+}
+
+export function toAbsoluteSiteUrl(value: string, env: EnvLike = process.env): string {
+	if (/^[a-z][a-z\d+.-]*:/i.test(value)) return value
+	const origin = getSiteOrigin(env)
+	const path = value.startsWith('/') ? value : `/${value}`
+	return `${origin}${path}`
+}

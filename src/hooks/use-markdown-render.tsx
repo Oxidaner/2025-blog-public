@@ -26,22 +26,25 @@ export function useMarkdownRender(markdown: string): MarkdownRenderResult {
 				if (!cancelled) {
 					// Extract pre elements and replace with placeholders before parsing
 					const codeBlocks: Array<{ placeholder: string; code: string; preHtml: string }> = []
-					let processedHtml = html.replace(/<pre\s+data-code="([^"]*)"([^>]*)>([\s\S]*?)<\/pre>/g, (match, codeAttr, attrs, content) => {
-						const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`
-						// Decode HTML entities in code attribute
-						const code = codeAttr
-							.replace(/&quot;/g, '"')
-							.replace(/&#39;/g, "'")
-							.replace(/&lt;/g, '<')
-							.replace(/&gt;/g, '>')
-							.replace(/&amp;/g, '&')
-						codeBlocks.push({
-							placeholder,
-							code,
-							preHtml: `${content}`
-						})
-						return placeholder
-					})
+					let processedHtml = html.replace(
+						/<(pre|div)\s+([^>]*?)data-code="([^"]*)"([^>]*)>([\s\S]*?)<\/\1>/g,
+						(match, tagName, beforeAttrs, codeAttr, afterAttrs, content) => {
+							const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`
+							// Decode HTML entities in code attribute
+							const code = codeAttr
+								.replace(/&quot;/g, '"')
+								.replace(/&#39;/g, "'")
+								.replace(/&lt;/g, '<')
+								.replace(/&gt;/g, '>')
+								.replace(/&amp;/g, '&')
+							codeBlocks.push({
+								placeholder,
+								code,
+								preHtml: `${content}`
+							})
+							return placeholder
+						}
+					)
 
 					// Parse HTML and replace img elements and code block placeholders
 					const options: HTMLReactParserOptions = {

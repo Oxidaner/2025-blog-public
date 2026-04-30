@@ -1,94 +1,130 @@
-'use client'
-
-import { useEffect, useMemo, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import dayjs from 'dayjs'
-import { motion } from 'motion/react'
-import { BlogPreview } from '@/components/blog-preview'
-import { loadBlog, type BlogConfig } from '@/lib/load-blog'
-import { useReadArticles } from '@/hooks/use-read-articles'
+import blogIndex from '@/../public/blogs/index.json'
+import type { BlogConfig, BlogIndexItem } from '@/app/blog/types'
+import { BlogServerPreview } from '@/components/blog-server-preview'
 import LiquidGrass from '@/components/liquid-grass'
+import { readBlogFromDisk, type LoadedBlogContent } from '@/lib/blog-content'
+import { renderMarkdown } from '@/lib/markdown-renderer'
+import { toAbsoluteSiteUrl } from '@/lib/site-url'
 
-export default function Page() {
-	const params = useParams() as { id?: string | string[] }
-	const slug = Array.isArray(params?.id) ? params.id[0] : params?.id || ''
-	const router = useRouter()
-	const { markAsRead } = useReadArticles()
+type BlogPageProps = {
+	params: Promise<{ id: string }>
+}
 
-	const [blog, setBlog] = useState<{ config: BlogConfig; markdown: string; cover?: string } | null>(null)
-	const [error, setError] = useState<string | null>(null)
-	const [loading, setLoading] = useState<boolean>(true)
+type ResolvedBlog = LoadedBlogContent & {
+	config: BlogConfig
+}
 
-	useEffect(() => {
-		let cancelled = false
-		async function run() {
-			if (!slug) return
-			try {
-				setLoading(true)
-				const blogData = await loadBlog(slug)
+const posts = blogIndex as BlogIndexItem[]
 
-				if (!cancelled) {
-					setBlog(blogData)
-					setError(null)
-					markAsRead(slug)
-				}
-			} catch (e: any) {
-				if (!cancelled) setError(e?.message || '加载失败')
-			} finally {
-				if (!cancelled) setLoading(false)
-			}
-		}
-		run()
-		return () => {
-			cancelled = true
-		}
-	}, [slug, markAsRead])
+function getIndexItem(slug: string): BlogIndexItem | undefined {
+	return posts.find(item => item.slug === slug)
+}
 
-	const title = useMemo(() => (blog?.config.title ? blog.config.title : slug), [blog?.config.title, slug])
-	const date = useMemo(() => dayjs(blog?.config.date).format('YYYY年 M月 D日'), [blog?.config.date])
-	const tags = blog?.config.tags || []
+async function getBlog(slug: string): Promise<ResolvedBlog | null> {
+	const blog = await readBlogFromDisk(slug)
+	if (!blog) return null
 
-	const handleEdit = () => {
-		router.push(`/write/${slug}`)
+	const indexItem = getIndexItem(slug)
+	const config = {
+		...(indexItem || {}),
+		...blog.config
 	}
 
-	if (!slug) {
-		return <div className='text-secondary flex h-full items-center justify-center text-sm'>无效的链接</div>
+	return {
+		...blog,
+		config,
+		cover: config.cover
 	}
+}
 
-	if (loading) {
-		return <div className='text-secondary flex h-full items-center justify-center text-sm'>加载中...</div>
-	}
+function getTitle(blog: ResolvedBlog, slug: string): string {
+	return blog.config.title || slug
+}
 
-	if (error) {
-		return <div className='flex h-full items-center justify-center text-sm text-red-500'>{error}</div>
-	}
+function getSummary(blog: ResolvedBlog): string | undefined {
+	return blog.config.summary
+}
 
+function getDisplayDate(date?: string): string {
+	if (!date) return ''
+	const parsed = dayjs(date)
+	return parsed.isValid() ? parsed.format('YYYY年 M月 D日') : ''
+}
+
+function getIsoDate(date?: string): string | undefined {
+	if (!date) return undefined
+	const parsed = new Date(date)
+	return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString()
+}
+
+export function generateStaticParams() {
+	return posts.filter(post => post.slug).map(post => ({ id: post.slug }))
+}
+
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+	const { id: slug } = await params
+	const blog = await getBlog(slug)
 	if (!blog) {
-		return <div className='text-secondary flex h-full items-center justify-center text-sm'>文章不存在</div>
+		return {
+			title: '文章不存在'
+		}
 	}
+
+	const title = getTitle(blog, slug)
+	const description = getSummary(blog)
+	const cover = blog.cover ? toAbsoluteSiteUrl(blog.cover) : undefined
+	const images = cover && !cover.startsWith('data:') ? [cover] : undefined
+	const publishedTime = getIsoDate(blog.config.date)
+	const tags = blog.config.tags || []
+
+	return {
+		title,
+		description,
+		alternates: {
+			canonical: `/blog/${slug}`
+		},
+		openGraph: {
+			type: 'article',
+			title,
+			description,
+			url: `/blog/${slug}`,
+			images,
+			publishedTime,
+			tags
+		},
+		twitter: {
+			card: images ? 'summary_large_image' : 'summary',
+			title,
+			description,
+			images
+		}
+	}
+}
+
+export default async function Page({ params }: BlogPageProps) {
+	const { id: slug } = await params
+	const blog = await getBlog(slug)
+	if (!blog) notFound()
+
+	const { html, toc } = await renderMarkdown(blog.markdown)
+	const title = getTitle(blog, slug)
+	const tags = blog.config.tags || []
+	const date = getDisplayDate(blog.config.date)
+	const cover = blog.cover ? toAbsoluteSiteUrl(blog.cover) : undefined
 
 	return (
 		<>
-			<BlogPreview
-				markdown={blog.markdown}
-				title={title}
-				tags={tags}
-				date={date}
-				summary={blog.config.summary}
-				cover={blog.cover ? (blog.cover.startsWith('http') ? blog.cover : `${origin}${blog.cover}`) : undefined}
-				slug={slug}
-			/>
+			<BlogServerPreview html={html} toc={toc} title={title} tags={tags} date={date} summary={blog.config.summary} cover={cover} slug={slug} />
 
-			<motion.button
-				initial={{ opacity: 0, scale: 0.6 }}
-				animate={{ opacity: 1, scale: 1 }}
-				whileHover={{ scale: 1.05 }}
-				whileTap={{ scale: 0.95 }}
-				onClick={handleEdit}
+			<Link
+				href={`/write/${slug}`}
 				className='absolute top-4 right-6 rounded-xl border bg-white/60 px-6 py-2 text-sm backdrop-blur-sm transition-colors hover:bg-white/80 max-sm:hidden'>
 				编辑
-			</motion.button>
+			</Link>
 
 			{slug === 'liquid-grass' && <LiquidGrass />}
 		</>

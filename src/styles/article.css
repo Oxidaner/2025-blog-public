@@ -139,6 +139,14 @@
 	margin: 1em 0 2em;
 }
 
+.prose .code-block-source {
+	margin: 1em 0 2em;
+}
+
+.prose .code-block-source > pre {
+	margin: 0;
+}
+
 .prose .code-block-wrapper > pre {
 	margin: 0;
 }

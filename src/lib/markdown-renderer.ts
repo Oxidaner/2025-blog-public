@@ -16,6 +16,10 @@ export function slugify(text: string): string {
 		.replace(/\s+/g, '-')
 }
 
+function escapeHtml(text: string): string {
+	return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 // Lazy load shiki to handle environments where it's not available (e.g., Cloudflare Workers)
 let shikiModule: typeof import('shiki') | null = null
 let shikiLoadAttempted = false
@@ -82,13 +86,13 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 			}
 			if (codeData.html) {
 				// Shiki highlighted code
-				return `<pre data-code="${escapedCode}">${codeData.html}</pre>`
+				return `<div class="code-block-source" data-code="${escapedCode}">${codeData.html}</div>`
 			}
 			// Fallback for failed highlighting
-			return `<pre data-code="${escapedCode}"><code>${codeData.original}</code></pre>`
+			return `<pre data-code="${escapedCode}"><code>${escapeHtml(codeData.original)}</code></pre>`
 		}
 		// Fallback to default (inline code, not code block)
-		return `<code>${token.text}</code>`
+		return `<code>${escapeHtml(token.text)}</code>`
 	}
 
 	renderer.listitem = (token: Tokens.ListItem) => {
