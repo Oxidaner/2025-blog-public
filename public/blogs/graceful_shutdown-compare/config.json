@@ -1,6 +1,10 @@
 {
   "title": "Dubbo 优雅下线：dubbo-go 和 dubbo-java 的设计对比",
-  "tags": [],
+  "tags": [
+    "dubbo",
+    "dubbo-go",
+    "graceful-shutdown"
+  ],
   "date": "2026-03-28T09:32",
   "summary": "Dubbo 优雅下线：dubbo-go 和 dubbo-java 的设计对比",
   "cover": "/blogs/graceful_shutdown-compare/af1995b341d1efa1.jpeg",
