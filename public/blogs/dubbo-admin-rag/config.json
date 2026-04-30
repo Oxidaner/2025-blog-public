@@ -1,6 +1,10 @@
 {
   "title": " Dubbo Admin RAG 重构逻辑：从“查资料”到“检索流水线”",
-  "tags": [],
+  "tags": [
+    "dubbo-admin",
+    "dubbo",
+    "RAG"
+  ],
   "date": "2026-04-29T12:09",
   "summary": " Dubbo Admin RAG 重构逻辑",
   "cover": "/blogs/dubbo-admin-rag/6c2a6544995886f6.png",
