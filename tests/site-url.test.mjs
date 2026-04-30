@@ -9,7 +9,11 @@ test('getSiteOrigin prefers SITE_URL and normalizes trailing slash', () => {
 
 test('getSiteOrigin falls back to NEXT_PUBLIC_SITE_URL and VERCEL_URL', () => {
 	assert.equal(getSiteOrigin({ NEXT_PUBLIC_SITE_URL: 'https://public.example.com/path/' }), 'https://public.example.com')
-	assert.equal(getSiteOrigin({ VERCEL_URL: 'preview.example.vercel.app' }), 'https://preview.example.vercel.app')
+	assert.equal(getSiteOrigin({ VERCEL_URL: 'preview.example.vercel.app' }, ''), 'https://preview.example.vercel.app')
+})
+
+test('getSiteOrigin prefers configured canonical origin before VERCEL_URL', () => {
+	assert.equal(getSiteOrigin({ VERCEL_URL: 'preview.example.vercel.app' }, 'https://website.oxidaner.shop/'), 'https://website.oxidaner.shop')
 })
 
 test('toAbsoluteSiteUrl leaves absolute and data URLs unchanged', () => {
