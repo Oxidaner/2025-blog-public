@@ -1,5 +1,18 @@
 [
   {
+    "slug": "harness-agent",
+    "title": "Agent Harness 工程（01）：我们到底在给模型造什么？",
+    "tags": [
+      "agent",
+      "harness"
+    ],
+    "date": "2026-05-07T01:41",
+    "summary": "Agent Harness 工程：我们到底在给模型造什么？",
+    "cover": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.PGErdpwPQrdKuqnb2e4D1gHaEC%3Fpid%3DApi&f=1&ipt=04ac433b658dc9e0a21a9cf23535e73441fb9800b294cf5fa8f3356192c9e5e3&ipo=images",
+    "hidden": false,
+    "category": "总结"
+  },
+  {
     "slug": "Dubbo-Admin-MCP",
     "title": "Dubbo Admin MCP 设计解析：让 AI 助手查询 Dubbo 集群",
     "tags": [
