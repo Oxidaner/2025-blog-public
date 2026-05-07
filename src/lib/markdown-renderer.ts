@@ -112,6 +112,19 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 		return `<li>${inner}</li>\n`
 	}
 
+	renderer.table = (token: Tokens.Table) => {
+		const renderCell = (cell: Tokens.TableCell) => {
+			const tag = cell.header ? 'th' : 'td'
+			const align = cell.align ? ` style="text-align:${cell.align}"` : ''
+			const text = markdownParser.Parser.parseInline(cell.tokens, markdownParser.defaults) as string
+			return `<${tag}${align}>${text}</${tag}>`
+		}
+		const header = `<tr>${token.header.map(renderCell).join('')}</tr>`
+		const rows = token.rows.map(row => `<tr>${row.map(renderCell).join('')}</tr>`).join('')
+		const body = rows ? `\n<tbody>${rows}</tbody>` : ''
+		return `<div class="markdown-table-frame" data-reading-zoom="table"><table><thead>${header}</thead>${body}</table></div>`
+	}
+
 	const renderMath = (content: string, displayMode: boolean) => {
 		if (!katex) {
 			// Keep original delimiters if katex is not available

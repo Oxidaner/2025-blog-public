@@ -7,6 +7,7 @@ import { useSize } from '@/hooks/use-size'
 import { BlogSidebar } from '@/components/blog-sidebar'
 import { useConfigStore } from '@/app/(home)/stores/config-store'
 import { estimateReadingStats } from '@/lib/reading-metrics'
+import { BlogArticleEnhancements } from '@/components/blog-article-enhancements'
 
 type BlogPreviewProps = {
 	markdown: string
@@ -49,7 +50,10 @@ export function BlogPreview({ markdown, title, tags, date, summary, cover, slug 
 
 					{summary && summaryInContent && <div className='text-secondary mt-6 cursor-text text-center text-sm'>“{summary}”</div>}
 
-					<div className='prose mt-6 max-w-none cursor-text'>{content}</div>
+					<div className='prose mt-6 max-w-none cursor-text' data-blog-article-content>
+						{content}
+					</div>
+					<BlogArticleEnhancements contentKey={markdown} />
 				</div>
 			</motion.article>
 

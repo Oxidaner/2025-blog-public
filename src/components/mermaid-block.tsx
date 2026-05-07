@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useId, useMemo, useState } from 'react'
+import { MERMAID_RENDER_CONFIG } from '@/lib/mermaid-config'
 
 type MermaidState = {
 	svg: string
@@ -26,11 +27,7 @@ export function MermaidBlock({ code }: { code: string }) {
 				const mermaid = mod.default
 
 				if (!mermaidInitialized) {
-					mermaid.initialize({
-						startOnLoad: false,
-						securityLevel: 'strict',
-						theme: 'neutral'
-					})
+					mermaid.initialize(MERMAID_RENDER_CONFIG)
 					mermaidInitialized = true
 				}
 
