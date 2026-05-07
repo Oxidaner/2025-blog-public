@@ -29,7 +29,7 @@ type HomeSocialPositionStyles = {
 }
 
 const SOCIAL_BUTTONS_Y_NUDGE = 18
-const LOWER_RIGHT_GROUP_Y_NUDGE = -52
+const LOWER_RIGHT_GROUP_Y_NUDGE = -32
 
 export function getHomeSocialButtonsPosition(center: CenterPoint, styles: HomeSocialPositionStyles, spacing: number) {
 	return {
