@@ -11,6 +11,17 @@ type MermaidState = {
 
 let mermaidInitialized = false
 
+function getSvgOrientation(svg: string) {
+	const match = svg.match(/viewBox=["'][^"']*?\s([\d.]+)\s([\d.]+)["']/i)
+	if (!match) return 'balanced'
+	const width = Number(match[1])
+	const height = Number(match[2])
+	if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return 'balanced'
+	if (height / width > 1.25) return 'tall'
+	if (width / height > 1.25) return 'wide'
+	return 'balanced'
+}
+
 export function MermaidBlock({ code }: { code: string }) {
 	const reactId = useId()
 	const diagramId = useMemo(() => `mermaid-${reactId.replace(/[^a-zA-Z0-9_-]/g, '')}`, [reactId])
@@ -66,5 +77,5 @@ export function MermaidBlock({ code }: { code: string }) {
 		)
 	}
 
-	return <div className='mermaid-block' dangerouslySetInnerHTML={{ __html: state.svg }} />
+	return <div className='mermaid-block' data-mermaid-orientation={getSvgOrientation(state.svg)} dangerouslySetInnerHTML={{ __html: state.svg }} />
 }

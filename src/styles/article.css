@@ -188,8 +188,9 @@
 /* Mermaid */
 .prose .mermaid-block {
 	width: 100%;
+	max-height: min(68vh, 560px);
 	margin: 1.25em 0 2em;
-	overflow-x: auto;
+	overflow: auto;
 	border: 1px solid rgba(0, 0, 0, 0.08);
 	border-radius: 12px;
 	background: rgba(255, 255, 255, 0.55);
@@ -201,9 +202,20 @@
 .prose .mermaid-block svg {
 	display: block;
 	max-width: none !important;
-	min-width: 100%;
+	min-width: 0;
+	width: auto !important;
+	max-height: 520px;
 	height: auto;
 	margin: 0 auto;
+}
+
+.prose .mermaid-block[data-mermaid-orientation='wide'] svg {
+	max-height: none;
+}
+
+.prose .mermaid-block[data-mermaid-orientation='tall'] {
+	display: flex;
+	justify-content: center;
 }
 
 .prose .mermaid-block-loading,
@@ -234,13 +246,15 @@
 
 /* Images */
 .prose img {
-	max-width: 40%;
-	margin: 1.5em auto;
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	max-height: 72vh;
+	margin: 1.75em auto;
 	height: auto;
+	object-fit: contain;
 	border-radius: 12px;
 	border: 1px solid rgba(0, 0, 0, 0.1);
-
-	@apply max-sm:max-w-full;
 }
 
 /* Blockquote */
@@ -264,7 +278,7 @@
 	width: fit-content;
 	max-width: 100%;
 	overflow-x: auto;
-	margin: 1.4em 0;
+	margin: 1.4em auto;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	border-radius: 10px;
 	background: rgba(255, 255, 255, 0.5);
@@ -336,6 +350,14 @@
 	gap: 0.75rem;
 }
 
+.article-lightbox-content-table {
+	width: min(1120px, 94vw);
+}
+
+.article-lightbox-content-mermaid {
+	width: min(1180px, 94vw);
+}
+
 .article-lightbox-header {
 	display: flex;
 	align-items: center;
@@ -368,33 +390,74 @@
 	overflow: auto;
 }
 
-.article-lightbox-html .markdown-table-frame {
-	width: fit-content;
-	max-width: none;
-	margin: 0;
-	overflow: visible;
-	cursor: default;
-	background: white;
+.article-lightbox-html-table {
+	width: 100%;
 }
 
-.article-lightbox-html table {
+.article-lightbox-html-table .markdown-table-frame {
+	width: 100%;
+	max-width: 100%;
+	margin: 0;
+	overflow: auto;
+	cursor: default;
+	background: white;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+}
+
+.article-lightbox-html-table table {
 	width: max-content;
-	max-width: none;
+	min-width: 100%;
 	font-size: 14px;
+	border-collapse: separate;
+	border-spacing: 0;
 }
 
-.article-lightbox-html .mermaid-block {
+.article-lightbox-html-table th,
+.article-lightbox-html-table td {
+	min-width: 96px;
+	max-width: 420px;
+	border-right: 1px solid rgba(0, 0, 0, 0.08);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+	padding: 0.75rem 0.9rem;
+	text-align: left;
+	vertical-align: top;
+	overflow-wrap: anywhere;
+}
+
+.article-lightbox-html-table thead th {
+	background: rgba(0, 0, 0, 0.04);
+	color: var(--color-primary);
+	font-weight: 600;
+}
+
+.article-lightbox-html-table tbody tr:nth-child(even) {
+	background: rgba(0, 0, 0, 0.025);
+}
+
+.article-lightbox-html-table tr:last-child td {
+	border-bottom: 0;
+}
+
+.article-lightbox-html-table th:last-child,
+.article-lightbox-html-table td:last-child {
+	border-right: 0;
+}
+
+.article-lightbox-html-mermaid .mermaid-block {
 	width: fit-content;
 	max-width: none;
+	max-height: none;
 	margin: 0;
 	overflow: visible;
 	cursor: default;
 	background: white;
 }
 
-.article-lightbox-html .mermaid-block svg {
+.article-lightbox-html-mermaid .mermaid-block svg {
 	max-width: none !important;
 	min-width: 0;
 	width: auto !important;
+	max-height: none;
 	height: auto;
 }

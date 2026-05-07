@@ -6,14 +6,14 @@ export const MERMAID_RENDER_CONFIG = {
 	flowchart: {
 		useMaxWidth: false,
 		htmlLabels: true,
-		wrappingWidth: 260,
-		nodeSpacing: 60,
+		wrappingWidth: 340,
+		nodeSpacing: 70,
 		rankSpacing: 70
 	},
 	sequence: {
 		useMaxWidth: false,
 		wrap: true,
-		width: 180
+		width: 220
 	},
 	themeVariables: {
 		fontFamily: 'Arial, sans-serif',

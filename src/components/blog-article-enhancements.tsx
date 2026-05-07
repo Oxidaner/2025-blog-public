@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import { DialogModal } from '@/components/dialog-modal'
 import { MERMAID_RENDER_CONFIG } from '@/lib/mermaid-config'
+import { cn } from '@/lib/utils'
 
 let mermaidInitialized = false
 
@@ -16,6 +17,17 @@ type ArticleLightboxState = {
 
 type BlogArticleEnhancementsProps = {
 	contentKey?: string
+}
+
+function getSvgOrientation(svg: string) {
+	const match = svg.match(/viewBox=["'][^"']*?\s([\d.]+)\s([\d.]+)["']/i)
+	if (!match) return 'balanced'
+	const width = Number(match[1])
+	const height = Number(match[2])
+	if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return 'balanced'
+	if (height / width > 1.25) return 'tall'
+	if (width / height > 1.25) return 'wide'
+	return 'balanced'
 }
 
 export function BlogArticleEnhancements({ contentKey }: BlogArticleEnhancementsProps) {
@@ -51,6 +63,7 @@ export function BlogArticleEnhancements({ contentKey }: BlogArticleEnhancementsP
 							const { svg } = await mermaid.render(id, code)
 							if (cancelled) return
 							block.innerHTML = svg
+							block.dataset.mermaidOrientation = getSvgOrientation(svg)
 							block.dataset.rendered = 'true'
 						} catch (error) {
 							if (cancelled) return
@@ -136,7 +149,7 @@ export function BlogArticleEnhancements({ contentKey }: BlogArticleEnhancementsP
 	return (
 		<DialogModal open={!!lightbox} onClose={() => setLightbox(null)} className='article-lightbox-panel max-w-none bg-white/95 p-4'>
 			{lightbox && (
-				<div className='article-lightbox-content'>
+				<div className={cn('article-lightbox-content', `article-lightbox-content-${lightbox.kind}`)}>
 					<div className='article-lightbox-header'>
 						<div className='truncate text-sm font-medium'>{lightbox.title}</div>
 						<button type='button' className='article-lightbox-close' onClick={() => setLightbox(null)} aria-label='关闭'>
@@ -144,7 +157,7 @@ export function BlogArticleEnhancements({ contentKey }: BlogArticleEnhancementsP
 						</button>
 					</div>
 					{lightbox.kind === 'image' && lightbox.src && <img src={lightbox.src} alt={lightbox.title} className='article-lightbox-image' />}
-					{lightbox.html && <div className='article-lightbox-html' dangerouslySetInnerHTML={{ __html: lightbox.html }} />}
+					{lightbox.html && <div className={cn('article-lightbox-html', `article-lightbox-html-${lightbox.kind}`)} dangerouslySetInnerHTML={{ __html: lightbox.html }} />}
 				</div>
 			)}
 		</DialogModal>
