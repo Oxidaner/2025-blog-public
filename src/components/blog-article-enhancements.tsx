@@ -19,6 +19,39 @@ type BlogArticleEnhancementsProps = {
 	contentKey?: string
 }
 
+function clearColumnHover(tableFrame: HTMLElement) {
+	tableFrame.classList.remove('is-column-hovering')
+	tableFrame.querySelectorAll('.is-column-hovered').forEach(cell => {
+		cell.classList.remove('is-column-hovered')
+	})
+}
+
+function highlightTableColumn(tableFrame: HTMLElement, cell: HTMLElement) {
+	const row = cell.parentElement
+	if (!row) return
+	const index = Array.from(row.children).indexOf(cell)
+	if (index < 0) return
+
+	clearColumnHover(tableFrame)
+	tableFrame.classList.add('is-column-hovering')
+	const rows = Array.from(tableFrame.querySelectorAll('tr'))
+	for (const tableRow of rows) {
+		const targetCell = tableRow.children[index]
+		if (targetCell instanceof HTMLElement) {
+			targetCell.classList.add('is-column-hovered')
+		}
+	}
+}
+
+function getCleanOuterHtml(element: HTMLElement) {
+	const clone = element.cloneNode(true) as HTMLElement
+	clone.classList.remove('is-column-hovering')
+	clone.querySelectorAll('.is-column-hovered').forEach(cell => {
+		cell.classList.remove('is-column-hovered')
+	})
+	return clone.outerHTML
+}
+
 function getSvgOrientation(svg: string) {
 	const match = svg.match(/viewBox=["'][^"']*?\s([\d.]+)\s([\d.]+)["']/i)
 	if (!match) return 'balanced'
@@ -103,6 +136,31 @@ export function BlogArticleEnhancements({ contentKey }: BlogArticleEnhancementsP
 			})
 		}
 
+		function addTableColumnHover(tableFrame: HTMLElement) {
+			const handlePointerOver = (event: PointerEvent) => {
+				const cell = (event.target as HTMLElement | null)?.closest('th, td')
+				if (!(cell instanceof HTMLElement) || !tableFrame.contains(cell)) return
+				highlightTableColumn(tableFrame, cell)
+			}
+			const handleFocusIn = (event: FocusEvent) => {
+				const cell = (event.target as HTMLElement | null)?.closest('th, td')
+				if (!(cell instanceof HTMLElement) || !tableFrame.contains(cell)) return
+				highlightTableColumn(tableFrame, cell)
+			}
+			const handleClear = () => clearColumnHover(tableFrame)
+
+			tableFrame.addEventListener('pointerover', handlePointerOver)
+			tableFrame.addEventListener('pointerleave', handleClear)
+			tableFrame.addEventListener('focusin', handleFocusIn)
+			tableFrame.addEventListener('focusout', handleClear)
+			cleanupFns.push(() => {
+				tableFrame.removeEventListener('pointerover', handlePointerOver)
+				tableFrame.removeEventListener('pointerleave', handleClear)
+				tableFrame.removeEventListener('focusin', handleFocusIn)
+				tableFrame.removeEventListener('focusout', handleClear)
+			})
+		}
+
 		for (const root of roots) {
 			const images = Array.from(root.querySelectorAll<HTMLImageElement>('img:not([data-markdown-image])'))
 			for (const image of images) {
@@ -117,11 +175,12 @@ export function BlogArticleEnhancements({ contentKey }: BlogArticleEnhancementsP
 
 			const tables = Array.from(root.querySelectorAll<HTMLElement>('.markdown-table-frame'))
 			for (const table of tables) {
+				addTableColumnHover(table)
 				addZoomHandlers(table, '点击放大表格', () => {
 					setLightbox({
 						kind: 'table',
 						title: '表格预览',
-						html: table.outerHTML
+						html: getCleanOuterHtml(table)
 					})
 				})
 			}
@@ -145,6 +204,26 @@ export function BlogArticleEnhancements({ contentKey }: BlogArticleEnhancementsP
 			cleanupFns.forEach(cleanup => cleanup())
 		}
 	}, [contentKey])
+
+	useEffect(() => {
+		if (lightbox?.kind !== 'table') return
+		const tableFrame = document.querySelector<HTMLElement>('.article-lightbox-html-table .markdown-table-frame')
+		if (!tableFrame) return
+
+		const handlePointerOver = (event: PointerEvent) => {
+			const cell = (event.target as HTMLElement | null)?.closest('th, td')
+			if (!(cell instanceof HTMLElement) || !tableFrame.contains(cell)) return
+			highlightTableColumn(tableFrame, cell)
+		}
+		const handleClear = () => clearColumnHover(tableFrame)
+
+		tableFrame.addEventListener('pointerover', handlePointerOver)
+		tableFrame.addEventListener('pointerleave', handleClear)
+		return () => {
+			tableFrame.removeEventListener('pointerover', handlePointerOver)
+			tableFrame.removeEventListener('pointerleave', handleClear)
+		}
+	}, [lightbox])
 
 	return (
 		<DialogModal open={!!lightbox} onClose={() => setLightbox(null)} className='article-lightbox-panel max-w-none bg-white/95 p-4'>
