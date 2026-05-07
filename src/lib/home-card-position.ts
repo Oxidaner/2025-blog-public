@@ -29,6 +29,7 @@ type HomeSocialPositionStyles = {
 }
 
 const SOCIAL_BUTTONS_Y_NUDGE = 18
+const LOWER_RIGHT_GROUP_Y_NUDGE = -52
 
 export function getHomeSocialButtonsPosition(center: CenterPoint, styles: HomeSocialPositionStyles, spacing: number) {
 	return {
@@ -56,7 +57,7 @@ function getDefaultLikeX(center: CenterPoint, styles: HomeMusicPositionStyles, s
 }
 
 function getDefaultLikeY(center: CenterPoint, styles: HomeMusicPositionStyles, spacing: number) {
-	return center.y + styles.hiCard.height / 2 + spacing + styles.socialButtons.height + spacing + styles.musicCard.height + spacing
+	return center.y + styles.hiCard.height / 2 + spacing + styles.socialButtons.height + spacing + styles.musicCard.height + spacing + LOWER_RIGHT_GROUP_Y_NUDGE
 }
 
 function getDefaultMusicX(center: CenterPoint, styles: HomeMusicPositionStyles, spacing: number) {
@@ -66,4 +67,11 @@ function getDefaultMusicX(center: CenterPoint, styles: HomeMusicPositionStyles, 
 function getDefaultMusicY(center: CenterPoint, styles: HomeMusicPositionStyles, spacing: number) {
 	const likeY = getDefaultLikeY(center, styles, spacing)
 	return likeY + (styles.likePosition.height - styles.musicCard.height) / 2
+}
+
+export function getHomeLikePosition(center: CenterPoint, styles: HomeMusicPositionStyles, spacing: number) {
+	return {
+		x: getDefaultLikeX(center, styles, spacing),
+		y: getDefaultLikeY(center, styles, spacing)
+	}
 }

@@ -4,6 +4,7 @@ import { motion } from 'motion/react'
 import { useCenterStore } from '@/hooks/use-center'
 import { useConfigStore } from './stores/config-store'
 import { HomeDraggableLayer } from './home-draggable-layer'
+import { getHomeLikePosition } from '@/lib/home-card-position'
 
 export default function LikePosition() {
 	const center = useCenterStore()
@@ -14,12 +15,19 @@ export default function LikePosition() {
 	const musicCardStyles = cardStyles.musicCard
 	const shareCardStyles = cardStyles.shareCard
 
-	const x =
-		styles.offsetX !== null ? center.x + styles.offsetX : center.x + hiCardStyles.width / 2 - socialButtonsStyles.width + shareCardStyles.width + CARD_SPACING
-	const y =
-		styles.offsetY !== null
-			? center.y + styles.offsetY
-			: center.y + hiCardStyles.height / 2 + CARD_SPACING + socialButtonsStyles.height + CARD_SPACING + musicCardStyles.height + CARD_SPACING
+	const defaultPosition = getHomeLikePosition(
+		center,
+		{
+			hiCard: hiCardStyles,
+			socialButtons: socialButtonsStyles,
+			shareCard: shareCardStyles,
+			likePosition: styles,
+			musicCard: musicCardStyles
+		},
+		CARD_SPACING
+	)
+	const x = styles.offsetX !== null ? center.x + styles.offsetX : defaultPosition.x
+	const y = styles.offsetY !== null ? center.y + styles.offsetY : defaultPosition.y
 
 	return (
 		<HomeDraggableLayer cardKey='likePosition' x={x} y={y} width={styles.width} height={styles.height}>
