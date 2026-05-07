@@ -12,10 +12,10 @@
 		]
 	},
 	{
-		"name": "手机",
+		"name": "iphone 17",
 		"year": 2026,
 		"description": "随身使用的移动设备，用来处理消息、拍摄素材、阅读文章，也会用于检查博客在移动端的显示效果。",
-		"image": "/images/devices/phone.svg",
+		"image": "https://img0.baidu.com/it/u=1972335275,117871280&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1016",
 		"url": "device-phone",
 		"tags": [
 			"移动端",
@@ -24,10 +24,10 @@
 		]
 	},
 	{
-		"name": "耳机",
+		"name": "gpw wireless",
 		"year": 2026,
 		"description": "写代码和通勤时使用，主要负责降噪、听音乐和线上沟通，让工作环境更稳定。",
-		"image": "/images/devices/headphones.svg",
+		"image": "https://img1.baidu.com/it/u=2976148249,1619957307&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500",
 		"url": "device-headphones",
 		"tags": [
 			"音乐",
@@ -36,10 +36,10 @@
 		]
 	},
 	{
-		"name": "键盘和桌面外设",
+		"name": "sony xm4",
 		"year": 2026,
 		"description": "长期输入和桌面工作流的一部分，偏向舒适、稳定和可维护的使用体验。",
-		"image": "/images/devices/keyboard.svg",
+		"image": "https://p8.itc.cn/q_70/images03/20200806/51c9f9c92234429d96ebdbea5282ee99.jpeg",
 		"url": "device-keyboard",
 		"tags": [
 			"输入",
