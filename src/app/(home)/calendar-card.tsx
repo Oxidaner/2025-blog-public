@@ -200,7 +200,7 @@ export default function CalendarCard() {
 					</div>
 					<ul
 						className={cn(
-							'text-secondary mt-4 grid h-[244px] min-h-0 flex-1 grid-cols-7 grid-rows-[20px_repeat(6,minmax(0,1fr))] gap-2 text-sm',
+							'text-secondary mt-4 grid min-h-0 flex-1 grid-cols-7 grid-rows-[20px_repeat(6,minmax(0,1fr))] gap-2 text-sm',
 							(styles.height < 240 || styles.width < 240) && 'text-xs'
 						)}>
 						{new Array(7).fill(0).map((_, index) => {
