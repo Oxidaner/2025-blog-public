@@ -1,4 +1,4 @@
-import { marked } from 'marked'
+import { Marked, Renderer } from 'marked'
 import type { Tokens } from 'marked'
 
 export type TocItem = { id: string; text: string; level: number }
@@ -65,9 +65,10 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	// (If we lex before registering extensions, math tokens won't ever be produced on a cold refresh.)
 	const codeBlockMap = new Map<string, { kind: 'code'; html: string; original: string } | { kind: 'mermaid'; original: string }>()
 	const [shiki, katex] = await Promise.all([loadShiki(), loadKatex()])
+	const markdownParser = new Marked({ gfm: true })
 
 	// Render HTML with heading ids
-	const renderer = new marked.Renderer()
+	const renderer = new Renderer()
 
 	renderer.heading = (token: Tokens.Heading) => {
 		const id = slugify(token.text || '')
@@ -101,7 +102,7 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 		let tokens = token.tokens
 
 		if (token.task) tokens = tokens.slice(1)
-		inner = marked.parser(tokens) as string
+		inner = markdownParser.parser(tokens) as string
 
 		if (token.task) {
 			const checkbox = token.checked ? '<input type="checkbox" checked disabled />' : '<input type="checkbox" disabled />'
@@ -130,7 +131,7 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	}
 
 	// Register extensions BEFORE lexing so math gets tokenized on cold refresh.
-	marked.use({
+	markdownParser.use({
 		renderer,
 		extensions: [
 			// Block math: $$ ... $$
@@ -187,7 +188,7 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	})
 
 	// Pre-process with marked lexer first (after extensions are registered)
-	const tokens = marked.lexer(markdown)
+	const tokens = markdownParser.lexer(markdown)
 
 	// Extract TOC from parsed tokens (this correctly skips code blocks)
 	const toc: TocItem[] = []
@@ -207,41 +208,53 @@ export async function renderMarkdown(markdown: string): Promise<MarkdownRenderRe
 	}
 	extractHeadings(tokens)
 
-	// Pre-process code blocks with Shiki
-	for (const token of tokens) {
-		if (token.type === 'code') {
-			const codeToken = token as Tokens.Code
-			const originalCode = codeToken.text
-			const key = `__SHIKI_CODE_${codeBlockMap.size}__`
-			const lang = (codeToken.lang || '').split(/\s+/)[0].toLowerCase()
+	// Pre-process code blocks with Shiki. Walk nested tokens too so code inside
+	// blockquotes/lists uses the same placeholder replacement path.
+	async function processCodeTokens(tokenList: any[]) {
+		for (const token of tokenList) {
+			if (token.type === 'code') {
+				const codeToken = token as Tokens.Code
+				const originalCode = codeToken.text
+				const key = `__SHIKI_CODE_${codeBlockMap.size}__`
+				const lang = (codeToken.lang || '').split(/\s+/)[0].toLowerCase()
 
-			if (lang === 'mermaid') {
-				codeBlockMap.set(key, { kind: 'mermaid', original: originalCode })
-				codeToken.text = key
-				continue
-			}
-
-			if (shiki) {
-				try {
-					const html = await shiki.codeToHtml(originalCode, {
-						lang: codeToken.lang || 'text',
-						theme: 'one-light'
-					})
-					codeBlockMap.set(key, { kind: 'code', html, original: originalCode })
+				if (lang === 'mermaid') {
+					codeBlockMap.set(key, { kind: 'mermaid', original: originalCode })
 					codeToken.text = key
-				} catch {
-					// Keep original if highlighting fails
+					continue
+				}
+
+				if (shiki) {
+					try {
+						const html = await shiki.codeToHtml(originalCode, {
+							lang: codeToken.lang || 'text',
+							theme: 'one-light'
+						})
+						codeBlockMap.set(key, { kind: 'code', html, original: originalCode })
+						codeToken.text = key
+					} catch {
+						// Keep original if highlighting fails
+						codeBlockMap.set(key, { kind: 'code', html: '', original: originalCode })
+						codeToken.text = key
+					}
+				} else {
+					// Fallback when shiki is not available
 					codeBlockMap.set(key, { kind: 'code', html: '', original: originalCode })
 					codeToken.text = key
 				}
-			} else {
-				// Fallback when shiki is not available
-				codeBlockMap.set(key, { kind: 'code', html: '', original: originalCode })
-				codeToken.text = key
+			}
+
+			if (Array.isArray(token.tokens)) {
+				await processCodeTokens(token.tokens)
+			}
+			if (Array.isArray(token.items)) {
+				await processCodeTokens(token.items)
 			}
 		}
 	}
-	const html = (marked.parser(tokens) as string) || ''
+	await processCodeTokens(tokens as any[])
+
+	const html = (markdownParser.parser(tokens) as string) || ''
 
 	return { html, toc }
 }
