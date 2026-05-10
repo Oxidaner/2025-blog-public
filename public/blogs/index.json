@@ -1,5 +1,19 @@
 [
   {
+    "slug": "metadata-spec",
+    "title": "Dubbo-go Metadata 设计方案",
+    "tags": [
+      "dubbo-go",
+      "go",
+      "metadata"
+    ],
+    "date": "2026-05-11T01:56",
+    "summary": "",
+    "cover": "/blogs/metadata-spec/45c80c19520dc17f.png",
+    "hidden": false,
+    "category": "开源"
+  },
+  {
     "slug": "harness-agent",
     "title": "Agent Harness 工程（01）：我们到底在给模型造什么？",
     "tags": [
