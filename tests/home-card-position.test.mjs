@@ -21,7 +21,7 @@ test('getHomeMusicCardPosition places music card to the right of like position',
 
 	assert.deepEqual(position, {
 		x: 651,
-		y: 700
+		y: 668
 	})
 })
 

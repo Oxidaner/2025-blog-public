@@ -33,16 +33,16 @@ const LOWER_RIGHT_GROUP_Y_NUDGE = -32
 
 export function getHomeSocialButtonsPosition(center: CenterPoint, styles: HomeSocialPositionStyles, spacing: number) {
 	return {
-		x: styles.socialButtons.offsetX !== null ? center.x + styles.socialButtons.offsetX : center.x + styles.hiCard.width / 2 - styles.socialButtons.width,
-		y: styles.socialButtons.offsetY !== null ? center.y + styles.socialButtons.offsetY : center.y + styles.hiCard.height / 2 + spacing + SOCIAL_BUTTONS_Y_NUDGE
+		x: styles.socialButtons.offsetX != null ? center.x + styles.socialButtons.offsetX : center.x + styles.hiCard.width / 2 - styles.socialButtons.width,
+		y: styles.socialButtons.offsetY != null ? center.y + styles.socialButtons.offsetY : center.y + styles.hiCard.height / 2 + spacing + SOCIAL_BUTTONS_Y_NUDGE
 	}
 }
 
 export function getHomeMusicCardPosition(center: CenterPoint, styles: HomeMusicPositionStyles, spacing: number) {
-	if (styles.musicCard.offsetX !== null || styles.musicCard.offsetY !== null) {
+	if (styles.musicCard.offsetX != null || styles.musicCard.offsetY != null) {
 		return {
-			x: styles.musicCard.offsetX !== null ? center.x + styles.musicCard.offsetX : getDefaultMusicX(center, styles, spacing),
-			y: styles.musicCard.offsetY !== null ? center.y + styles.musicCard.offsetY : getDefaultMusicY(center, styles, spacing)
+			x: styles.musicCard.offsetX != null ? center.x + styles.musicCard.offsetX : getDefaultMusicX(center, styles, spacing),
+			y: styles.musicCard.offsetY != null ? center.y + styles.musicCard.offsetY : getDefaultMusicY(center, styles, spacing)
 		}
 	}
 

@@ -1,0 +1,90 @@
+{
+	"wishlist": [
+		{
+			"id": "want-ramen-shanghai",
+			"name": "豚骨拉面",
+			"type": "dish",
+			"city": "上海",
+			"area": "静安寺",
+			"tags": ["日料", "面食"],
+			"priority": "high",
+			"note": "想找一家汤底浓、叉烧稳定的拉面店。",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-11T00:00:00.000Z",
+			"done": false
+		},
+		{
+			"id": "want-dessert-hangzhou",
+			"name": "开心果甜品",
+			"type": "dish",
+			"city": "杭州",
+			"area": "武林",
+			"tags": ["甜品", "下午茶"],
+			"priority": "medium",
+			"note": "优先找不太甜、奶油轻一点的。",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T00:00:00.000Z",
+			"done": false
+		}
+	],
+	"restaurants": [
+		{
+			"id": "sample-hotpot-shanghai",
+			"name": "山城火锅",
+			"city": "上海",
+			"area": "静安寺",
+			"address": "南京西路 100 号",
+			"dianpingUrl": "",
+			"cover": "",
+			"cuisine": "火锅",
+			"pricePerPerson": 160,
+			"rating": 5,
+			"visitedAt": "2026-05-01",
+			"tags": ["聚餐", "偏辣", "性价比高"],
+			"note": "锅底稳定，适合朋友聚餐。",
+			"recommendedDishes": [
+				{
+					"id": "sample-hotpot-beef",
+					"name": "雪花牛肉",
+					"rating": 5,
+					"tags": ["必点"],
+					"note": "肉质不错，涮几秒就可以。"
+				}
+			],
+			"avoidDishes": [
+				{
+					"id": "sample-hotpot-dessert",
+					"name": "红糖糍粑",
+					"rating": 2,
+					"tags": ["油腻"],
+					"note": "炸得偏硬。"
+				}
+			]
+		},
+		{
+			"id": "sample-bistro-hangzhou",
+			"name": "小巷西餐",
+			"city": "杭州",
+			"area": "武林",
+			"address": "武林路 88 号",
+			"dianpingUrl": "",
+			"cover": "",
+			"cuisine": "西餐",
+			"pricePerPerson": 220,
+			"rating": 4,
+			"visitedAt": "2026-05-08",
+			"tags": ["约会", "适合拍照"],
+			"note": "环境好，出品稳定。",
+			"recommendedDishes": [
+				{
+					"id": "sample-bistro-pasta",
+					"name": "松露意面",
+					"rating": 4,
+					"tags": ["稳定"],
+					"note": "香气足，份量正常。"
+				}
+			],
+			"avoidDishes": []
+		}
+	]
+}
