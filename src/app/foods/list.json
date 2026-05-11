@@ -1,27 +1,169 @@
 {
 	"wishlist": [
 		{
-			"id": "want-ramen-shanghai",
-			"name": "豚骨拉面",
+			"id": "want-1778457469834-fy84oy",
+			"name": "烧鹅",
 			"type": "dish",
-			"city": "上海",
-			"area": "静安寺",
-			"tags": ["日料", "面食"],
+			"city": "",
+			"area": "",
+			"tags": [],
+			"priority": "medium",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:57:49.834Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457469416-dq985e",
+			"name": "烤鸭",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [],
+			"priority": "medium",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:57:49.416Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457469094-l5vxsj",
+			"name": "松板肉",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [],
+			"priority": "medium",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:57:49.094Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457401299-qn36o3",
+			"name": "肉酱千层面",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [
+				"西餐"
+			],
+			"priority": "medium",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:56:41.299Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457401116-04zxkf",
+			"name": "汤",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [
+				"汤，"
+			],
+			"priority": "medium",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:56:41.116Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457400929-jvtryj",
+			"name": "驴肉火烧",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [],
+			"priority": "medium",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:56:40.929Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457372733-dchwsy",
+			"name": "炒饭",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [
+				"炒饭"
+			],
+			"priority": "medium",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:56:12.733Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457327727-ygywrn",
+			"name": "烤鱼",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [
+				"烤鱼"
+			],
 			"priority": "high",
-			"note": "想找一家汤底浓、叉烧稳定的拉面店。",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:55:27.727Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457327324-ufo05p",
+			"name": "猪肚鸡",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [],
+			"priority": "high",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:55:27.324Z",
+			"done": false
+		},
+		{
+			"id": "want-1778457326851-wsp0hb",
+			"name": "江西菜",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [],
+			"priority": "high",
+			"note": "",
+			"dianpingUrl": "",
+			"createdAt": "2026-05-10T23:55:26.850Z",
+			"done": false
+		},
+		{
+			"id": "want-ramen-shanghai",
+			"name": "火锅鸡",
+			"type": "dish",
+			"city": "",
+			"area": "",
+			"tags": [
+				"干锅，香锅"
+			],
+			"priority": "high",
+			"note": "",
 			"dianpingUrl": "",
 			"createdAt": "2026-05-11T00:00:00.000Z",
 			"done": false
 		},
 		{
 			"id": "want-dessert-hangzhou",
-			"name": "开心果甜品",
+			"name": "扒拉锅",
 			"type": "dish",
-			"city": "杭州",
-			"area": "武林",
-			"tags": ["甜品", "下午茶"],
-			"priority": "medium",
-			"note": "优先找不太甜、奶油轻一点的。",
+			"city": "",
+			"area": "",
+			"tags": [
+				"干锅，香锅"
+			],
+			"priority": "high",
+			"note": "",
 			"dianpingUrl": "",
 			"createdAt": "2026-05-10T00:00:00.000Z",
 			"done": false
@@ -29,58 +171,114 @@
 	],
 	"restaurants": [
 		{
-			"id": "sample-hotpot-shanghai",
-			"name": "山城火锅",
-			"city": "上海",
-			"area": "静安寺",
-			"address": "南京西路 100 号",
-			"dianpingUrl": "",
+			"id": "restaurant-1778458214057-in07p7",
+			"name": "阿依来新疆餐厅(红旗路店)",
+			"city": "天津",
+			"area": "白堤路/风荷园",
+			"address": "红旗路地铁6号线鞍山西道站C出口旁",
+			"dianpingUrl": "https://m.dianping.com/shopinfo/H5fP10QsNDyB8jVT?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=3243&cityid=10&isoversea=0",
 			"cover": "",
-			"cuisine": "火锅",
-			"pricePerPerson": 160,
+			"cuisine": "新疆菜",
+			"pricePerPerson": 71,
+			"rating": 3,
+			"visitedAt": "2026-05-11",
+			"tags": [],
+			"note": "一般般没有特别亮点，不过好像所有新疆菜都很火",
+			"recommendedDishes": [],
+			"avoidDishes": []
+		},
+		{
+			"id": "restaurant-1778457947759-rrg6gv",
+			"name": "老四长沙菜洞庭过江鱼",
+			"city": "天津",
+			"area": "大直沽商圈",
+			"address": "十五经路鸿运里3—01",
+			"dianpingUrl": "https://m.dianping.com/shopinfo/k6sAXH3GkKyZgUfi?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=104&cityid=10&isoversea=0",
+			"cover": "",
+			"cuisine": "湘菜",
+			"pricePerPerson": 82,
 			"rating": 5,
-			"visitedAt": "2026-05-01",
-			"tags": ["聚餐", "偏辣", "性价比高"],
-			"note": "锅底稳定，适合朋友聚餐。",
+			"visitedAt": "2026-05-11",
+			"tags": [],
+			"note": "好吃，不用点鱼感觉鱼一般",
 			"recommendedDishes": [
 				{
-					"id": "sample-hotpot-beef",
-					"name": "雪花牛肉",
+					"id": "dish-1778458056701-xaiy5k",
+					"name": "新菜品",
 					"rating": 5,
-					"tags": ["必点"],
-					"note": "肉质不错，涮几秒就可以。"
+					"tags": [
+						"黄金蛋"
+					],
+					"note": ""
+				},
+				{
+					"id": "dish-1778458062829-xdtykh",
+					"name": "新菜品",
+					"rating": 4,
+					"tags": [
+						"皮蛋茄子"
+					],
+					"note": ""
 				}
 			],
-			"avoidDishes": [
-				{
-					"id": "sample-hotpot-dessert",
-					"name": "红糖糍粑",
-					"rating": 2,
-					"tags": ["油腻"],
-					"note": "炸得偏硬。"
-				}
-			]
+			"avoidDishes": []
+		},
+		{
+			"id": "restaurant-1778457817115-ip87kh",
+			"name": "大铁勺酒楼(熙悦汇店)",
+			"city": "天津",
+			"area": "密云路",
+			"address": "黄河道与密云路交叉口熙悦汇购物中心5层506b号",
+			"dianpingUrl": "https://m.dianping.com/shopinfo/l5Rd8lTPoVbVRx7G?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=497&cityid=10&isoversea=0",
+			"cover": "",
+			"cuisine": "天津菜",
+			"pricePerPerson": 86,
+			"rating": 3,
+			"visitedAt": "2026-05-11",
+			"tags": [],
+			"note": "中规中矩，不好不差",
+			"recommendedDishes": [],
+			"avoidDishes": []
+		},
+		{
+			"id": "sample-hotpot-shanghai",
+			"name": "金正串烧(中山路店)",
+			"city": "天津",
+			"area": "中山路",
+			"address": "中山路与金辉路交叉口东行60米路北",
+			"dianpingUrl": "https://m.dianping.com/shopinfo/k4I5AQT3R2AsMIC4?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=508&cityid=10&isoversea=0",
+			"cover": "",
+			"cuisine": "烧烤烤串",
+			"pricePerPerson": 72,
+			"rating": 5,
+			"visitedAt": "2026-05-01",
+			"tags": [],
+			"note": "好吃",
+			"recommendedDishes": [],
+			"avoidDishes": []
 		},
 		{
 			"id": "sample-bistro-hangzhou",
-			"name": "小巷西餐",
-			"city": "杭州",
-			"area": "武林",
-			"address": "武林路 88 号",
-			"dianpingUrl": "",
+			"name": "馋嘴蛙火锅",
+			"city": "天津",
+			"area": "水上/天塔",
+			"address": "天塔道上谷商业街D座20号 ",
+			"dianpingUrl": "https://m.dianping.com/shopinfo/G8v5yjjL5B0JVTSF?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=4469&cityid=10&isoversea=0",
 			"cover": "",
-			"cuisine": "西餐",
-			"pricePerPerson": 220,
-			"rating": 4,
+			"cuisine": "干锅/香锅",
+			"pricePerPerson": 104,
+			"rating": 3,
 			"visitedAt": "2026-05-08",
-			"tags": ["约会", "适合拍照"],
-			"note": "环境好，出品稳定。",
+			"tags": [],
+			"note": "好吃",
 			"recommendedDishes": [
 				{
 					"id": "sample-bistro-pasta",
-					"name": "松露意面",
+					"name": "牛蛙",
 					"rating": 4,
-					"tags": ["稳定"],
+					"tags": [
+						"稳定"
+					],
 					"note": "香气足，份量正常。"
 				}
 			],
