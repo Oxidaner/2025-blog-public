@@ -10,12 +10,16 @@ import { useConfigStore } from '@/app/(home)/stores/config-store'
 import { ScrollTopButton } from '@/components/scroll-top-button'
 import MusicCard from '@/components/music-card'
 import { CommandPalette } from '@/components/command-palette'
+import { usePathname } from 'next/navigation'
+import { isFullscreenRoute } from '@/lib/fullscreen-routes'
 
 export default function Layout({ children }: PropsWithChildren) {
 	useCenterInit()
 	useSizeInit()
 	const { cardStyles, siteContent, regenerateKey } = useConfigStore()
 	const { maxSM, init } = useSize()
+	const pathname = usePathname()
+	const fullscreenRoute = isFullscreenRoute(pathname)
 
 	const backgroundImages = (siteContent.backgroundImages ?? []) as Array<{ id: string; url: string }>
 	const currentBackgroundImageId = siteContent.currentBackgroundImageId
@@ -55,13 +59,13 @@ export default function Layout({ children }: PropsWithChildren) {
 
 			<main className='relative z-10 h-full'>
 				{children}
-				<NavCard />
-				<CommandPalette />
+				{!fullscreenRoute && <NavCard />}
+				{!fullscreenRoute && <CommandPalette />}
 
-				{!maxSM && cardStyles.musicCard?.enabled !== false && <MusicCard />}
+				{!fullscreenRoute && !maxSM && cardStyles.musicCard?.enabled !== false && <MusicCard />}
 			</main>
 
-			{maxSM && init && <ScrollTopButton className='bg-brand/20 fixed right-6 bottom-8 z-50 shadow-md' />}
+			{!fullscreenRoute && maxSM && init && <ScrollTopButton className='bg-brand/20 fixed right-6 bottom-8 z-50 shadow-md' />}
 		</>
 	)
 }

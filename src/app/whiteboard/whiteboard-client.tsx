@@ -6,6 +6,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { createWhiteboardFile, createWhiteboardFilename, parseWhiteboardFile, WHITEBOARD_STORAGE_KEY, type WhiteboardFile } from '@/lib/excalidraw-storage'
+import { WHITEBOARD_CANVAS_CLASS_NAME, WHITEBOARD_CANVAS_REGION_CLASS_NAME, WHITEBOARD_PAGE_CLASS_NAME } from '@/lib/whiteboard-layout'
 
 type ExcalidrawAPI = {
 	getSceneElements: () => readonly unknown[]
@@ -106,7 +107,7 @@ export default function WhiteboardClient() {
 	}
 
 	return (
-		<div className='flex h-dvh flex-col overflow-hidden bg-[#f7f1e8] pt-24 max-sm:pt-22'>
+		<div className={WHITEBOARD_PAGE_CLASS_NAME}>
 			<input
 				ref={fileInputRef}
 				type='file'
@@ -119,21 +120,8 @@ export default function WhiteboardClient() {
 				}}
 			/>
 
-			<div className='mx-auto flex w-full max-w-[1440px] shrink-0 items-center justify-between gap-4 px-6 pb-4 max-sm:flex-col max-sm:items-start max-sm:px-4'>
-				<div>
-					<h1 className='text-primary text-2xl font-semibold'>白板</h1>
-					<p className='text-secondary mt-1 text-sm'>独立 Excalidraw 画布，自动保存在当前浏览器。</p>
-				</div>
-				<div className='flex flex-wrap items-center gap-2'>
-					<span className='rounded-full border bg-white/60 px-3 py-1.5 text-xs text-secondary'>{saveState}</span>
-					<ToolButton icon={FileUp} label='导入' onClick={() => fileInputRef.current?.click()} />
-					<ToolButton icon={Download} label='导出' onClick={handleExport} />
-					<ToolButton icon={RotateCcw} label='清空' onClick={handleClear} tone='danger' />
-				</div>
-			</div>
-
-			<div className='mx-auto min-h-0 w-full max-w-[1440px] flex-1 px-6 pb-6 max-sm:px-4'>
-				<div className='h-full min-h-[620px] overflow-hidden rounded-2xl border bg-white shadow-sm'>
+			<div className={WHITEBOARD_CANVAS_REGION_CLASS_NAME}>
+				<div className={WHITEBOARD_CANVAS_CLASS_NAME}>
 					<Excalidraw
 						excalidrawAPI={api => {
 							apiRef.current = api as ExcalidrawAPI
@@ -142,6 +130,14 @@ export default function WhiteboardClient() {
 						onChange={(elements, appState, files) => persistScene(elements, appState as unknown as Record<string, unknown>, files as unknown as Record<string, unknown>)}
 						theme='light'
 						name='Oxidaner Whiteboard'
+						renderTopRightUI={() => (
+							<WhiteboardToolbar
+								saveState={saveState}
+								onImport={() => fileInputRef.current?.click()}
+								onExport={handleExport}
+								onClear={handleClear}
+							/>
+						)}
 						UIOptions={{
 							canvasActions: {
 								saveToActiveFile: false,
@@ -153,6 +149,27 @@ export default function WhiteboardClient() {
 					/>
 				</div>
 			</div>
+		</div>
+	)
+}
+
+function WhiteboardToolbar({
+	saveState,
+	onImport,
+	onExport,
+	onClear
+}: {
+	saveState: string
+	onImport: () => void
+	onExport: () => void
+	onClear: () => void
+}) {
+	return (
+		<div className='pointer-events-auto flex flex-wrap items-center justify-end gap-2 pr-1'>
+			<span className='rounded-lg border border-black/10 bg-white/85 px-2.5 py-1.5 text-xs text-secondary shadow-sm backdrop-blur-md'>{saveState}</span>
+			<ToolButton icon={FileUp} label='导入' onClick={onImport} />
+			<ToolButton icon={Download} label='导出' onClick={onExport} />
+			<ToolButton icon={RotateCcw} label='清空' onClick={onClear} tone='danger' />
 		</div>
 	)
 }
@@ -173,7 +190,7 @@ function ToolButton({
 			type='button'
 			onClick={onClick}
 			className={cn(
-				'flex items-center gap-2 rounded-xl border bg-white/70 px-3 py-2 text-sm shadow-sm transition-colors hover:bg-white',
+				'flex items-center gap-2 rounded-lg border border-black/10 bg-white/85 px-3 py-2 text-sm shadow-sm backdrop-blur-md transition-colors hover:bg-white',
 				tone === 'danger' && 'text-red-500 hover:border-red-200'
 			)}>
 			<Icon className='size-4' />
