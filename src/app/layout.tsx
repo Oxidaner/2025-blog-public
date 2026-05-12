@@ -1,4 +1,5 @@
 import '@/styles/globals.css'
+import '@excalidraw/excalidraw/index.css'
 
 import type { Metadata } from 'next'
 import Layout from '@/layout'

@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils'
 import { useSize } from '@/hooks/use-size'
 import { useConfigStore } from '@/app/(home)/stores/config-store'
 import { HomeDraggableLayer } from '@/app/(home)/home-draggable-layer'
-import { Utensils } from 'lucide-react'
+import { PencilRuler, Utensils } from 'lucide-react'
 
 const list = [
 	{
@@ -43,6 +43,12 @@ const list = [
 		iconActive: Utensils,
 		label: '美食饭店',
 		href: '/foods'
+	},
+	{
+		icon: PencilRuler,
+		iconActive: PencilRuler,
+		label: '白板',
+		href: '/whiteboard'
 	},
 	{
 		icon: AboutOutlineSVG,
@@ -109,7 +115,7 @@ export default function NavCard() {
 
 	const size = useMemo(() => {
 		if (form === 'mini') return { width: 64, height: 64 }
-		else if (form === 'icons') return { width: 400, height: 64 }
+		else if (form === 'icons') return { width: 460, height: 64 }
 		else return { width: styles.width, height: styles.height }
 	}, [form, styles])
 
