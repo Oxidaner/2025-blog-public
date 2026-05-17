@@ -1,0 +1,13 @@
+{
+  "title": "从 Dubbo 到 Dubbo-Go：Metadata 到底解决了什么问题？",
+  "tags": [
+    "dubbo",
+    "dubbo-go",
+    "metadata"
+  ],
+  "date": "2026-05-05T17:56",
+  "summary": "从应用级服务发现、revision、mapping 到元数据治理体系的源码对比",
+  "cover": "/blogs/metadata-compare/ec7fb49a43fa02dc.png",
+  "hidden": false,
+  "category": "开源"
+}
